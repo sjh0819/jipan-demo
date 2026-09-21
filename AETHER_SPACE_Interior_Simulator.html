@@ -1,0 +1,2290 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>집안 — 집을 안심하고 맡긴다</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&amp;family=Nanum+Myeongjo:wght@400;700;800&amp;family=Pretendard:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="vendor/pannellum/pannellum.css">
+  <style>
+    :root {
+      --ink: #173332;
+      --ink-soft: #2c4b48;
+      --mist: #edf0eb;
+      --paper: #fbfaf7;
+      --line: #d8ded4;
+      --moss: #4b786c;
+      --moss-deep: #285148;
+      --sage: #b8cbbb;
+      --sage-light: #e4ede2;
+      --clay: #c77a55;
+      --sand: #ded2be;
+      --sun: #efb85c;
+      --danger: #b84b45;
+      --shadow: 0 18px 50px rgba(24, 49, 45, .12);
+      --render-filter: saturate(1.02) contrast(1.01);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      min-width: 320px;
+      color: var(--ink);
+      background: var(--paper);
+      font-family: Pretendard, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      letter-spacing: -.02em;
+    }
+    button, input { font: inherit; }
+    button { cursor: pointer; }
+    .screen-reader { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; }
+    .page-shell { overflow: hidden; }
+    .top-line { height: 5px; background: linear-gradient(90deg, var(--moss), #9dc1ad 50%, var(--clay)); }
+    .nav {
+      height: 76px;
+      max-width: 1440px;
+      padding: 0 40px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 28px;
+    }
+    .brand { display: flex; align-items: center; gap: 11px; color: var(--ink); text-decoration: none; }
+    .brand-mark {
+      position: relative;
+      display: grid;
+      place-items: center;
+      width: 37px;
+      height: 37px;
+      border-radius: 12px;
+      color: var(--paper);
+      background: linear-gradient(145deg, #2f685c, #183d37);
+      box-shadow: 0 7px 15px rgba(25,66,58,.18);
+    }
+    .brand-mark::after { content: ""; position: absolute; inset: 5px; border: 1px solid rgba(255,255,255,.2); border-radius: 9px; }
+    .brand-mark svg { position: relative; z-index: 1; width: 23px; height: 23px; }
+    .brand-name { font-size: 17px; font-weight: 800; letter-spacing: .08em; }
+    .nav-links { display: flex; align-items: center; gap: 23px; }
+    .nav-links a { color: #54706a; text-decoration: none; font-size: 13px; font-weight: 600; }
+    .nav-links a:hover { color: var(--moss-deep); }
+    .profile { display: flex; align-items: center; gap: 9px; padding: 7px 8px 7px 12px; border: 1px solid var(--line); border-radius: 999px; font-size: 12px; font-weight: 700; color: var(--ink-soft); }
+    .profile-dot { width: 25px; height: 25px; border-radius: 50%; background: #cddccf; display: grid; place-items: center; color: var(--moss-deep); font-size: 12px; }
+
+    .hero {
+      position: relative;
+      min-height: 276px;
+      color: #fff;
+      background: var(--ink);
+      isolation: isolate;
+    }
+    .hero::before {
+      content: "";
+      position: absolute;
+      z-index: -1;
+      inset: 0;
+      background:
+        radial-gradient(circle at 78% -20%, rgba(185, 212, 186, .45), transparent 32%),
+        radial-gradient(circle at 16% 100%, rgba(199, 122, 85, .28), transparent 36%),
+        linear-gradient(118deg, #102e2c 0%, #1e4942 52%, #1d3e3a 100%);
+    }
+    .hero::after {
+      content: "";
+      position: absolute;
+      z-index: -1;
+      inset: 0;
+      opacity: .22;
+      background-image: linear-gradient(rgba(255,255,255,.08) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.08) 1px, transparent 1px);
+      background-size: 38px 38px;
+      mask-image: linear-gradient(90deg, #000, transparent 70%);
+    }
+    .hero-inner { max-width: 1440px; padding: 45px 40px 48px; margin: 0 auto; }
+    .eyebrow { display: flex; align-items: center; gap: 8px; margin: 0 0 14px; color: #c1d6c5; font-size: 12px; font-weight: 700; letter-spacing: .08em; }
+    .eyebrow .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--sun); box-shadow: 0 0 0 5px rgba(239,184,92,.14); }
+    h1 { max-width: 780px; margin: 0; font-family: "Nanum Myeongjo", serif; font-size: clamp(30px, 4vw, 52px); line-height: 1.25; letter-spacing: -.06em; }
+    .hero-copy { max-width: 660px; margin: 17px 0 0; color: #d6e3da; font-size: 16px; line-height: 1.7; }
+    .hero-copy strong { color: #fff6e1; font-weight: 700; }
+    .promise-row { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 22px; }
+    .promise-row span { display: inline-flex; align-items: center; gap: 6px; padding: 7px 10px; border: 1px solid rgba(207,229,214,.24); border-radius: 999px; color: #dbece0; background: rgba(255,255,255,.07); font-size: 10px; font-weight: 700; backdrop-filter: blur(5px); }
+    .promise-row i { width: 5px; height: 5px; border-radius: 50%; background: #e7bc6a; box-shadow: 0 0 0 3px rgba(231,188,106,.13); }
+    .journey-row { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 18px; color: #dce9df; font-size: 10px; font-weight: 700; }
+    .journey-row span { display: inline-flex; align-items: center; gap: 6px; }
+    .journey-row b { color: #efc77d; font-family: "DM Mono", monospace; font-size: 9px; }
+    .journey-row i { color: rgba(255,255,255,.38); font-style: normal; }
+    .hero-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-top: 18px; }
+    .hero-cta { display: inline-flex; align-items: center; min-height: 42px; padding: 0 15px; border-radius: 10px; color: var(--ink); background: #fff5df; text-decoration: none; font-size: 11px; font-weight: 800; box-shadow: 0 9px 22px rgba(8,28,26,.18); }
+    .hero-audience { color: #c8dad0; font-size: 10px; font-weight: 600; }
+    .hero-orb { position: absolute; right: 9%; bottom: -60px; width: 240px; height: 240px; border: 1px solid rgba(222,210,190,.3); border-radius: 50%; }
+    .hero-orb::before { content: ""; position: absolute; inset: 23px; border-radius: 50%; border: 1px solid rgba(222,210,190,.22); }
+    .hero-orb::after { content: ""; position: absolute; left: 42px; top: 42px; width: 155px; height: 155px; background: radial-gradient(circle at 35% 30%, rgba(239,184,92,.8), rgba(199,122,85,.1) 50%, transparent 70%); border-radius: 50%; filter: blur(3px); }
+
+    .app-grid {
+      position: relative;
+      z-index: 2;
+      display: grid;
+      grid-template-columns: minmax(292px, 310px) minmax(500px, 1.48fr) minmax(360px, .92fr);
+      max-width: 1440px;
+      margin: -25px auto 0;
+      padding: 0 40px 70px;
+      gap: 18px;
+      align-items: start;
+    }
+    .panel {
+      background: rgba(255,255,255,.96);
+      border: 1px solid rgba(216, 222, 212, .9);
+      box-shadow: var(--shadow);
+      border-radius: 22px;
+    }
+    .control-panel { padding: 20px; }
+    .panel-label { display: flex; align-items: center; justify-content: space-between; gap: 9px; margin-bottom: 16px; color: var(--ink-soft); font-size: 11px; font-weight: 800; letter-spacing: .1em; }
+    .panel-label .step { color: var(--clay); }
+    .tiny-status { display: inline-flex; align-items: center; gap: 5px; color: var(--moss); font-size: 10px; font-weight: 700; letter-spacing: 0; }
+    .tiny-status i { width: 6px; height: 6px; border-radius: 50%; background: #67a789; }
+    .input-label { display: block; margin: 18px 0 8px; color: #59716b; font-size: 12px; font-weight: 700; }
+    .input-label:first-of-type { margin-top: 0; }
+    .search-field { position: relative; }
+    .search-icon { position: absolute; top: 13px; left: 13px; color: var(--moss); font-size: 17px; pointer-events: none; }
+    .search-field input {
+      width: 100%;
+      height: 48px;
+      padding: 0 13px 0 40px;
+      border: 1px solid #cbd6cc;
+      border-radius: 12px;
+      color: var(--ink);
+      background: #fff;
+      outline: none;
+      font-size: 13px;
+      transition: border .2s, box-shadow .2s;
+    }
+    .search-field input:focus { border-color: var(--moss); box-shadow: 0 0 0 4px rgba(75,120,108,.11); }
+    .search-list {
+      position: absolute;
+      top: 54px;
+      z-index: 8;
+      width: 100%;
+      display: none;
+      padding: 7px;
+      border: 1px solid #cbd6cc;
+      border-radius: 12px;
+      background: #fff;
+      box-shadow: 0 18px 36px rgba(24,49,45,.16);
+    }
+    .search-list.open { display: block; }
+    .search-item { width: 100%; padding: 10px; border: 0; border-radius: 8px; color: var(--ink); background: transparent; text-align: left; }
+    .search-item:hover { background: var(--sage-light); }
+    .search-item strong { display: block; font-size: 12px; }
+    .search-item span { display: block; margin-top: 3px; color: #789089; font-size: 10px; }
+    .unit-picker { display: grid; grid-template-columns: repeat(3, 1fr); gap: 7px; }
+    .unit-option { min-height: 57px; padding: 7px 5px; border: 1px solid #d5ddd5; border-radius: 10px; color: #53716a; background: #fff; text-align: center; transition: .18s; }
+    .unit-option:hover { border-color: #88a999; color: var(--moss-deep); }
+    .unit-option.active { color: var(--moss-deep); border-color: var(--moss); background: #edf5ef; box-shadow: inset 0 0 0 1px var(--moss); }
+    .unit-option b { display: block; font-size: 12px; }
+    .unit-option small { display: block; margin-top: 3px; font-size: 9px; }
+    .scope-picker { display: grid; grid-template-columns: repeat(2, 1fr); gap: 7px; }
+    .scope-option { min-height: 39px; padding: 7px 8px; border: 1px solid #d5ddd5; border-radius: 10px; color: #53716a; background: #fff; text-align: left; font-size: 10px; font-weight: 800; transition: .18s; }
+    .scope-option:first-child { grid-column: span 2; }
+    .scope-option:hover { border-color: #88a999; color: var(--moss-deep); }
+    .scope-option.active { color: var(--moss-deep); border-color: var(--moss); background: #edf5ef; box-shadow: inset 0 0 0 1px var(--moss); }
+    .scope-option small { display: block; margin-top: 2px; color: #83978e; font-size: 8px; font-weight: 600; }
+    .scope-guide { margin: 8px 0 -2px; color: #789089; font-size: 9px; line-height: 1.45; }
+    .style-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+    .style-card {
+      position: relative;
+      min-height: 82px;
+      overflow: hidden;
+      padding: 11px;
+      border: 1px solid #d4dcd3;
+      border-radius: 12px;
+      color: white;
+      text-align: left;
+      isolation: isolate;
+    }
+    .style-card::after { content: ""; position: absolute; z-index: -1; inset: 0; background: linear-gradient(135deg, rgba(0,0,0,.05), rgba(0,0,0,.42)); }
+    .style-card:hover { transform: translateY(-1px); }
+    .style-card.active { outline: 2px solid var(--moss-deep); outline-offset: 2px; }
+    .style-card b { display: block; font-size: 12px; }
+    .style-card small { display: block; margin-top: 5px; font-size: 9px; opacity: .85; }
+    .style-wood { background: linear-gradient(135deg, #b78352, #654a35); }
+    .style-soho { background: linear-gradient(135deg, #778378, #323937); }
+    .style-beige { background: linear-gradient(135deg, #e0cfb5, #a79178); }
+    .style-deep { background: linear-gradient(135deg, #5a6470, #1a2027); }
+    .budget-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 7px; }
+    .budget-option { min-height: 44px; padding: 7px 4px; border: 1px solid #d5ddd5; border-radius: 10px; color: #6a827b; background: #fff; font-size: 10px; font-weight: 700; }
+    .budget-option.active { color: #fff; border-color: var(--moss-deep); background: var(--moss-deep); }
+    .quiet-note { display: flex; gap: 8px; margin-top: 17px; padding: 11px; border-radius: 11px; color: #687d74; background: #f3f5f0; font-size: 10px; line-height: 1.55; }
+    .quiet-note b { color: var(--moss-deep); }
+
+    .intake-panel { grid-column: 1 / -1; padding: 22px; }
+    .intake-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; margin-bottom: 16px; }
+    .intake-head h2 { margin: 4px 0 0; font-family: "Nanum Myeongjo", serif; font-size: 24px; letter-spacing: -.05em; }
+    .intake-head p { max-width: 520px; margin: 0; color: #71857d; font-size: 11px; line-height: 1.6; }
+    .workflow-nav { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 13px; }
+    .workflow-nav a { padding: 6px 8px; border: 1px solid #d6e0d6; border-radius: 999px; color: #60776e; background: #fff; text-decoration: none; font-size: 8px; font-weight: 800; }
+    .workflow-nav a:hover { color: #fff; border-color: var(--moss-deep); background: var(--moss-deep); }
+    .intake-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+    .intake-step { min-width: 0; padding: 17px; border: 1px solid #dce3da; border-radius: 15px; background: #fbfcf9; scroll-margin-top: 18px; }
+    #taste-step { grid-column: 1 / -1; order: 1; }
+    #home-step { order: 2; }
+    #budget-step { order: 3; }
+    #priority-step { grid-column: 1 / -1; order: 4; }
+    #outcome-step { order: 5; }
+    .intake-step-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 13px; }
+    .intake-step-head strong { font-size: 13px; }
+    .intake-step-head span { color: var(--clay); font-family: "DM Mono", monospace; font-size: 9px; }
+    .question-label { display: block; margin: 14px 0 8px; color: #587168; font-size: 10px; font-weight: 800; }
+    .question-label:first-child { margin-top: 0; }
+    .choice-row, .choice-grid { display: flex; flex-wrap: wrap; gap: 7px; }
+    .choice-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .choice-pill, .method-tab, .quick-budget { min-height: 34px; padding: 7px 10px; border: 1px solid #d3ddd4; border-radius: 9px; color: #60766d; background: #fff; font-size: 10px; font-weight: 800; transition: .18s; }
+    .choice-pill:hover, .method-tab:hover, .quick-budget:hover { border-color: #8ead98; color: var(--moss-deep); }
+    .choice-pill.active, .method-tab.active, .quick-budget.active { color: #fff; border-color: var(--moss-deep); background: var(--moss-deep); }
+    .conditional-block { margin-top: 10px; padding: 11px; border-radius: 11px; background: #eef4ed; }
+    .conditional-block[hidden], .taste-method[hidden], .profile-edit[hidden] { display: none; }
+    .checkbox-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; }
+    .check-choice { position: relative; display: flex; align-items: center; min-height: 34px; padding: 7px 8px 7px 27px; border: 1px solid #d8e0d7; border-radius: 8px; color: #657a72; background: #fff; font-size: 9px; font-weight: 700; cursor: pointer; }
+    .check-choice input { position: absolute; opacity: 0; pointer-events: none; }
+    .check-choice::before { content: ""; position: absolute; left: 8px; width: 12px; height: 12px; border: 1px solid #b9c9bd; border-radius: 3px; background: #fff; }
+    .check-choice:has(input:checked) { color: var(--moss-deep); border-color: #7fa08b; background: #eef5ed; }
+    .check-choice:has(input:checked)::before { content: "✓"; display: grid; place-items: center; color: #fff; border-color: var(--moss-deep); background: var(--moss-deep); font-size: 9px; }
+    .method-tabs { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; margin-bottom: 11px; }
+    .method-tab { text-align: left; }
+    .method-tab small { display: block; margin-top: 3px; opacity: .7; font-size: 8px; font-weight: 600; }
+    .reference-grid { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 7px; }
+    .reference-card { position: relative; overflow: hidden; padding: 0; border: 2px solid transparent; border-radius: 10px; color: #fff; background: #dbe3da; text-align: left; }
+    .reference-card img { display: block; width: 100%; aspect-ratio: 4 / 3; object-fit: cover; }
+    .reference-card span { position: absolute; right: 0; bottom: 0; left: 0; padding: 16px 7px 6px; background: linear-gradient(transparent, rgba(12,35,32,.76)); font-size: 9px; font-weight: 800; }
+    .reference-card.active { border-color: var(--clay); box-shadow: 0 0 0 2px rgba(199,122,85,.2); }
+    .reference-card.active::after { content: "✓"; position: absolute; top: 6px; right: 6px; display: grid; place-items: center; width: 20px; height: 20px; border-radius: 50%; color: #fff; background: var(--clay); font-size: 10px; }
+    .preference-reasons { margin-top: 10px; }
+    .upload-drop { display: grid; place-items: center; min-height: 126px; padding: 18px; border: 1px dashed #9fb5a4; border-radius: 11px; color: #648078; background: #f3f7f1; text-align: center; transition: .18s; }
+    .upload-drop.dragover { border-color: var(--clay); background: #fff7ee; }
+    .upload-drop b { font-size: 11px; }
+    .upload-drop span { margin-top: 5px; font-size: 9px; line-height: 1.45; }
+    .upload-drop input { display: none; }
+    .upload-button { margin-top: 9px; padding: 7px 11px; border: 1px solid #abc0af; border-radius: 8px; color: var(--moss-deep); background: #fff; font-size: 9px; font-weight: 800; }
+    .upload-preview { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; margin-top: 8px; }
+    .upload-preview img { width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 7px; }
+    .analyze-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: 11px; }
+    .analyze-row small { color: #84968e; font-size: 8px; line-height: 1.4; }
+    .analyze-button { flex: 0 0 auto; padding: 9px 12px; border: 0; border-radius: 9px; color: #fff; background: var(--moss-deep); font-size: 10px; font-weight: 800; }
+    .taste-profile { margin-top: 12px; padding: 12px; border: 1px solid #d4e1d4; border-radius: 11px; background: #f2f7ef; }
+    .taste-profile[hidden] { display: none; }
+    .profile-title { display: flex; justify-content: space-between; gap: 10px; }
+    .profile-title b { color: var(--moss-deep); font-size: 11px; }
+    .prototype-badge { display: inline-flex; align-items: center; padding: 4px 7px; border-radius: 999px; color: #96633f; background: #fff0dc; font-size: 8px; font-weight: 800; }
+    .profile-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; margin-top: 9px; }
+    .profile-item { padding: 7px; border-radius: 7px; background: rgba(255,255,255,.8); }
+    .profile-item small { display: block; color: #87988f; font-size: 8px; }
+    .profile-item span { display: block; margin-top: 3px; color: #4f6b62; font-size: 9px; font-weight: 700; }
+    .profile-actions { display: flex; gap: 7px; margin-top: 9px; }
+    .profile-actions button { flex: 1; padding: 8px; border: 1px solid #b7cab9; border-radius: 8px; color: var(--moss-deep); background: #fff; font-size: 9px; font-weight: 800; }
+    .profile-actions button:first-child { color: #fff; border-color: var(--moss-deep); background: var(--moss-deep); }
+    .profile-edit { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; margin-top: 9px; }
+    .profile-edit label { color: #71877e; font-size: 8px; font-weight: 700; }
+    .profile-edit input { width: 100%; margin-top: 4px; padding: 7px; border: 1px solid #cedbd0; border-radius: 7px; color: var(--ink); background: #fff; font-size: 9px; }
+    .budget-input-wrap { display: flex; align-items: center; gap: 8px; padding: 9px 11px; border: 1px solid #cbd8cd; border-radius: 10px; background: #fff; }
+    .budget-input-wrap input { min-width: 0; width: 100%; border: 0; outline: 0; color: var(--ink); background: transparent; font-family: "DM Mono", monospace; font-size: 15px; font-weight: 700; text-align: right; }
+    .budget-input-wrap span { color: #698077; font-size: 10px; font-weight: 800; }
+    .budget-helper { display: flex; justify-content: space-between; margin-top: 5px; color: #8b9b94; font-size: 8px; }
+    .quick-budgets { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-top: 8px; }
+    .quick-budget { padding: 6px 4px; font-size: 9px; }
+    .engine-card { grid-column: 1 / -1; padding: 17px; border: 1px solid #cbdccd; border-radius: 15px; background: linear-gradient(135deg, #eff5ed, #fbf7ef); }
+    .engine-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+    .engine-head h3 { margin: 0; font-size: 14px; }
+    .engine-flow { display: grid; grid-template-columns: repeat(6, 1fr); gap: 18px; margin-top: 13px; }
+    .engine-flow span { position: relative; padding: 9px 7px; border-radius: 8px; color: #5f756d; background: rgba(255,255,255,.75); font-size: 8px; font-weight: 800; text-align: center; }
+    .engine-flow span:not(:last-child)::after { content: "→"; position: absolute; right: -14px; color: #9bab9f; }
+    .engine-output { display: grid; grid-template-columns: .7fr 1.3fr; gap: 10px; margin-top: 11px; }
+    .engine-summary, .engine-adjustment { padding: 11px; border-radius: 10px; background: rgba(255,255,255,.78); }
+    .engine-summary small, .engine-adjustment small { display: block; color: #87998f; font-size: 8px; font-weight: 800; }
+    .engine-summary b { display: block; margin-top: 5px; color: var(--moss-deep); font-size: 12px; }
+    .engine-summary span, .engine-adjustment p { display: block; margin: 5px 0 0; color: #63776f; font-size: 9px; line-height: 1.5; }
+    .engine-adjustment ul { display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px; margin: 8px 0 0; padding: 0; list-style: none; }
+    .engine-adjustment li { padding: 6px; border-radius: 7px; color: #6e7f78; background: #f3f5f0; font-size: 8px; line-height: 1.35; }
+    .scope-status-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 7px; margin-top: 11px; }
+    .scope-status { min-width: 0; padding: 10px; border-radius: 10px; background: rgba(255,255,255,.82); }
+    .scope-status b { display: flex; align-items: center; gap: 5px; font-size: 9px; }
+    .scope-status b::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+    .scope-status span { display: block; margin-top: 6px; color: #687b73; font-size: 8px; line-height: 1.45; }
+    .scope-status.possible b { color: #3d7962; }
+    .scope-status.adjust b { color: #aa713c; }
+    .scope-status.defer b { color: #7c7288; }
+    .scope-status.review b { color: #a45b4b; }
+    .site-badges { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 8px; }
+    .site-badges span { padding: 5px 7px; border-radius: 999px; color: #8a604c; background: #fff0e6; font-size: 8px; font-weight: 800; }
+
+    .studio-panel { overflow: hidden; }
+    .studio-top { display: flex; align-items: center; justify-content: space-between; min-height: 66px; padding: 0 22px; border-bottom: 1px solid var(--line); }
+    .address-block { display: flex; align-items: center; gap: 10px; }
+    .pin { display: grid; place-items: center; width: 28px; height: 28px; border-radius: 9px; color: var(--moss-deep); background: #e3eee4; font-size: 14px; }
+    .address-block small { display: block; color: #879992; font-size: 10px; }
+    .address-block b { display: block; margin-top: 2px; font-size: 13px; }
+    .source-badge { display: inline-flex; align-items: center; gap: 5px; padding: 6px 8px; border: 1px solid #cfdcd1; border-radius: 999px; color: var(--moss-deep); background: #f6faf6; font-size: 10px; font-weight: 700; white-space: nowrap; }
+    .source-badge::before { content: ""; width: 5px; height: 5px; border-radius: 50%; background: #78a986; }
+    .view-tabs { display: flex; gap: 5px; padding: 15px 22px 0; }
+    .view-tab { padding: 8px 11px; border: 0; border-bottom: 2px solid transparent; color: #81928a; background: transparent; font-size: 11px; font-weight: 800; }
+    .view-tab.active { border-color: var(--clay); color: var(--ink); }
+    .plan-stage { position: relative; min-height: 482px; margin: 0 22px 21px; border: 1px solid #dce3d9; border-radius: 17px; overflow: hidden; background: #f7f7f2; }
+    .plan-stage::before { content: ""; position: absolute; inset: 0; background-image: radial-gradient(#cfd8cf 1px, transparent 1px); background-size: 17px 17px; opacity: .55; pointer-events: none; }
+    .plan-meta { position: absolute; top: 15px; left: 15px; z-index: 2; display: flex; align-items: center; gap: 8px; }
+    .plan-meta b { padding: 7px 9px; border-radius: 8px; color: #fff; background: var(--ink); font-family: "DM Mono", monospace; font-size: 10px; }
+    .plan-meta span { padding: 6px 8px; border: 1px solid #d8ded4; border-radius: 999px; color: #697b73; background: rgba(255,255,255,.85); font-size: 10px; }
+    .plan-key { position: absolute; right: 14px; bottom: 13px; z-index: 2; display: flex; gap: 10px; padding: 7px 9px; border: 1px solid rgba(215,222,214,.9); border-radius: 9px; color: #65766e; background: rgba(255,255,255,.9); font-size: 9px; }
+    .plan-key i { display: inline-block; width: 7px; height: 7px; margin-right: 3px; border-radius: 2px; background: #b9d5bd; }
+    .plan-key i.wet { background: #a7c7d5; }
+    .floorplan { position: absolute; inset: 38px 20px 24px; width: calc(100% - 40px); height: calc(100% - 62px); }
+    .room { stroke: #405d58; stroke-width: 4; stroke-linejoin: round; }
+    .plan-svg-label { fill: #35534e; font-size: 17px; font-weight: 700; text-anchor: middle; }
+    .plan-svg-small { fill: #71857e; font-size: 11px; text-anchor: middle; }
+    .plan-svg-sub { fill: #8a9b94; font-size: 9px; text-anchor: middle; }
+    .plan-wall { fill: none; stroke: #35534e; stroke-width: 10; stroke-linejoin: round; }
+    .plan-door { fill: none; stroke: #c77a55; stroke-width: 2.5; }
+    .room-living { fill: #e0efdf; }
+    .room-bedroom { fill: #f4ecd9; }
+    .room-wet { fill: #dcecf1; }
+    .room-balcony { fill: #e8eee4; }
+    .room-hall { fill: #f5f4ef; }
+    .room-selected { stroke: var(--clay); stroke-width: 4.5; }
+    .iso-stage { position: absolute; inset: 0; display: grid; place-items: center; padding: 42px 28px 22px; }
+    .iso-stage.hidden, .floorplan.hidden { display: none; }
+    .iso-image { width: 100%; max-height: 100%; object-fit: contain; filter: drop-shadow(0 17px 16px rgba(24,49,45,.14)); }
+    .iso-hotspot { position: absolute; z-index: 2; padding: 6px 8px; border: 1px solid rgba(255,255,255,.8); border-radius: 999px; color: var(--moss-deep); background: rgba(255,255,255,.86); box-shadow: 0 7px 16px rgba(26,51,47,.14); backdrop-filter: blur(5px); font-size: 9px; font-weight: 800; transition: .18s; }
+    .iso-hotspot:hover, .iso-hotspot.active { color: #fff; border-color: var(--moss-deep); background: var(--moss-deep); transform: translateY(-2px); }
+    .iso-hotspot.living { left: 47%; top: 57%; }
+    .iso-hotspot.master { right: 13%; bottom: 23%; }
+    .iso-hotspot.small { left: 14%; bottom: 24%; }
+    .iso-hotspot.bath { right: 18%; top: 28%; }
+    .iso-hotspot.bath-two { left: 15%; top: 29%; }
+    .room-chip-row { display: flex; flex-wrap: wrap; gap: 7px; padding: 0 22px 21px; }
+    .room-chip { padding: 7px 9px; border: 1px solid #d6ddd5; border-radius: 999px; color: #63776f; background: #fff; font-size: 10px; font-weight: 700; }
+    .room-chip.active { color: #fff; border-color: var(--moss-deep); background: var(--moss-deep); }
+
+    .result-panel { overflow: hidden; }
+    .result-head { padding: 20px 20px 14px; }
+    .result-head h2 { margin: 0; color: var(--ink); font-family: "Nanum Myeongjo", serif; font-size: 20px; letter-spacing: -.05em; }
+    .result-head p { margin: 8px 0 0; color: #789089; font-size: 11px; line-height: 1.55; }
+    .credit-card { display: flex; align-items: center; gap: 10px; margin: 0 20px 14px; padding: 11px; border: 1px solid #efcf91; border-radius: 12px; background: #fff9eb; }
+    .credit-icon { display: grid; flex: 0 0 auto; place-items: center; width: 29px; height: 29px; border-radius: 9px; color: #a56718; background: #f8dc9d; }
+    .credit-card b { display: block; color: #806027; font-size: 11px; }
+    .credit-card span { display: block; margin-top: 3px; color: #ae9362; font-size: 9px; }
+    .render-frame { position: relative; min-height: 286px; aspect-ratio: 1.12; margin: 0 20px; overflow: hidden; border-radius: 15px; background: #d9d2c4; }
+    /* Each space is an independently cropped photo asset. This avoids position drift or
+       distorted room photos when the viewport changes size. */
+    .render-sprite { position: absolute; inset: 0; overflow: hidden; }
+    .render-sprite img { display: block; width: 100%; max-width: none; height: 100%; object-fit: cover; object-position: center; transition: transform .42s ease, opacity .24s ease; }
+    .render-frame:hover .render-sprite img { transform: scale(1.025); }
+    .bathroom-preview-pair { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; margin: 10px 20px 0; }
+    .bathroom-preview-pair[hidden] { display: none; }
+    .bathroom-preview { overflow: hidden; border: 1px solid #d8e3d7; border-radius: 11px; background: #f7faf5; }
+    .bathroom-preview img { display: block; width: 100%; aspect-ratio: 1.3; object-fit: cover; }
+    .bathroom-preview span { display: block; padding: 7px 8px 8px; color: #587168; font-size: 9px; font-weight: 800; }
+    .render-frame.unavailable { display: grid; place-items: center; padding: 34px; color: #587168; background: #edf3ed; text-align: center; }
+    .render-frame.unavailable::before { content: "이 조합의 공간 시안은 아직 라이브러리에 준비되지 않았습니다. 다른 시안을 재사용하지 않습니다."; max-width: 210px; font-size: 11px; font-weight: 700; line-height: 1.6; }
+    .render-frame.unavailable .render-sprite, .render-frame.unavailable .render-overlay, .render-frame.unavailable .render-caption { display: none; }
+    .render-overlay { position: absolute; inset: 0; background: linear-gradient(180deg, transparent 42%, rgba(18,37,34,.72)); pointer-events: none; }
+    .render-label { position: absolute; top: 11px; left: 11px; display: inline-flex; align-items: center; gap: 6px; padding: 7px 8px; border-radius: 999px; color: #fff; background: rgba(19,51,50,.78); backdrop-filter: blur(8px); font-size: 10px; font-weight: 700; }
+    .render-label i { width: 6px; height: 6px; border-radius: 50%; background: #82d1a4; }
+    .render-caption { position: absolute; right: 14px; bottom: 13px; left: 14px; color: #fff; }
+    .render-caption strong { display: block; font-family: "Nanum Myeongjo", serif; font-size: 19px; letter-spacing: -.05em; }
+    .render-caption span { display: block; margin-top: 5px; color: rgba(255,255,255,.76); font-size: 10px; }
+    .rendering-layer { position: absolute; inset: 0; display: none; align-items: center; justify-content: center; color: #fff; background: rgba(20,52,49,.76); backdrop-filter: blur(4px); }
+    .rendering-layer.show { display: flex; }
+    .rendering-content { text-align: center; }
+    .rendering-ring { width: 39px; height: 39px; margin: 0 auto 11px; border: 3px solid rgba(255,255,255,.25); border-top-color: #fff5d7; border-radius: 50%; animation: spin 1s linear infinite; }
+    .rendering-content b { display: block; font-size: 12px; }
+    .rendering-content span { display: block; margin-top: 6px; color: #dce8e1; font-size: 10px; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .result-actions { display: grid; grid-template-columns: 1fr auto; gap: 8px; padding: 14px 20px 12px; }
+    .primary-button, .secondary-button { min-height: 44px; border-radius: 11px; font-size: 11px; font-weight: 800; }
+    .primary-button { border: 1px solid var(--moss-deep); color: #fff; background: var(--moss-deep); box-shadow: 0 9px 20px rgba(40,81,72,.19); }
+    .primary-button:hover { background: #1f453e; }
+    .secondary-button { min-width: 43px; border: 1px solid #cad5cc; color: var(--moss-deep); background: #fff; }
+    .secondary-button:hover { background: #f3f7f3; }
+    .scene-label { display: flex; align-items: center; justify-content: space-between; margin: 13px 20px 0; color: #64786f; font-size: 10px; font-weight: 800; }
+    .scene-label span { color: #9aaa9f; font-size: 9px; font-weight: 600; }
+    .scene-selector { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin: 10px 20px 0; }
+    .scene-thumb { overflow: hidden; padding: 0; border: 1px solid #d5ddd5; border-radius: 9px; color: #657970; background: #fff; text-align: left; transition: .18s; }
+    .scene-thumb:hover { border-color: #91ae98; transform: translateY(-1px); }
+    .scene-thumb.active { border-color: var(--moss-deep); box-shadow: inset 0 0 0 1px var(--moss-deep); }
+    .scene-thumb-image { display: block; height: 40px; background: #dce5dc center / cover no-repeat; }
+    .scene-thumb span { display: block; padding: 5px 5px 6px; font-size: 8px; font-weight: 800; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .scope-card { margin: 12px 20px 0; padding: 11px; border: 1px solid #d8e3d7; border-radius: 12px; background: #f7faf5; }
+    .scope-top { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; }
+    .scope-top b { color: var(--moss-deep); font-size: 10px; }
+    .scope-top span { color: #82948c; font-size: 8px; text-align: right; }
+    .scope-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; margin-top: 9px; }
+    .scope-item { min-width: 0; padding: 7px; border-radius: 8px; background: rgba(255,255,255,.74); }
+    .scope-item small { display: block; color: #82948c; font-size: 8px; font-weight: 700; }
+    .scope-item span { display: block; margin-top: 4px; color: #587168; font-size: 9px; line-height: 1.42; }
+    .staging-note { display: flex; gap: 7px; margin: 0 20px 16px; color: #7a8f87; font-size: 9px; line-height: 1.45; }
+    .staging-note b { color: var(--clay); white-space: nowrap; }
+    .stage-line { height: 1px; background: var(--line); margin: 0 20px; }
+    .proof-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 15px 20px 20px; }
+    .proof-item { padding: 10px; border-radius: 12px; background: #f4f6f2; }
+    .proof-item strong { display: flex; align-items: center; gap: 5px; color: var(--moss-deep); font-size: 10px; }
+    .proof-item span { display: block; margin-top: 6px; color: #7c9088; font-size: 9px; line-height: 1.45; }
+
+    .trust-wrap { max-width: 1440px; margin: 0 auto; padding: 0 40px 84px; }
+    .section-heading { display: flex; align-items: end; justify-content: space-between; gap: 24px; margin-bottom: 19px; }
+    .section-heading h2 { margin: 0; color: var(--ink); font-family: "Nanum Myeongjo", serif; font-size: clamp(23px, 2.7vw, 34px); letter-spacing: -.06em; }
+    .section-heading p { max-width: 440px; margin: 0; color: #74877f; font-size: 12px; line-height: 1.6; }
+    .trust-grid { display: grid; grid-template-columns: 1.08fr 1.12fr 1fr; gap: 17px; }
+    .trust-card { padding: 22px; border: 1px solid #dce2da; border-radius: 18px; background: #fff; box-shadow: 0 12px 30px rgba(24,49,45,.05); }
+    .trust-number { display: flex; align-items: center; justify-content: space-between; color: var(--clay); font-family: "DM Mono", monospace; font-size: 11px; font-weight: 500; }
+    .trust-icon { display: grid; place-items: center; width: 28px; height: 28px; border-radius: 9px; color: var(--moss-deep); background: var(--sage-light); font-size: 14px; }
+    .trust-card h3 { margin: 17px 0 8px; color: var(--ink); font-size: 16px; letter-spacing: -.04em; }
+    .trust-card p { min-height: 42px; margin: 0; color: #71857d; font-size: 11px; line-height: 1.65; }
+    .mini-list { display: grid; gap: 6px; margin: 15px 0 0; padding: 0; list-style: none; }
+    .mini-list li { display: flex; gap: 7px; align-items: flex-start; color: #506a62; font-size: 10px; line-height: 1.45; }
+    .mini-list li::before { content: "·"; color: var(--clay); font-size: 18px; line-height: .7; }
+    .passport-preview { margin-top: 16px; padding: 11px; border: 1px solid #d8e3d7; border-radius: 12px; background: #f6faf4; }
+    .passport-head { display: flex; align-items: center; justify-content: space-between; color: #54756a; font-size: 9px; font-weight: 800; }
+    .passport-head span { color: #8a9d93; font-weight: 600; }
+    .passport-lines { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-top: 9px; }
+    .passport-lines b { padding: 6px; border-radius: 6px; color: #6e8379; background: rgba(255,255,255,.7); font-size: 8px; }
+    .link-button { padding: 0; border: 0; color: var(--moss-deep); background: transparent; text-decoration: underline; text-underline-offset: 3px; font-size: 10px; font-weight: 800; }
+    .milestone { display: grid; gap: 9px; margin-top: 16px; }
+    .milestone-row { display: grid; grid-template-columns: 24px 1fr; gap: 8px; align-items: start; }
+    .mile-dot { display: grid; place-items: center; width: 23px; height: 23px; border: 1px solid #bfd2c2; border-radius: 50%; color: var(--moss-deep); background: #eef5ec; font-size: 10px; }
+    .mile-copy b { display: block; color: #47645c; font-size: 10px; }
+    .mile-copy span { display: block; margin-top: 3px; color: #82948c; font-size: 9px; line-height: 1.42; }
+    .payment-note { margin-top: 14px; padding: 9px 10px; border-radius: 9px; color: #857656; background: #fbf5e9; font-size: 9px; line-height: 1.5; }
+    .match-box { margin-top: 15px; padding: 13px; border: 1px solid #d9e2d8; border-radius: 12px; background: linear-gradient(135deg, #f7faf5, #edf5ec); }
+    .match-box b { color: var(--moss-deep); font-size: 11px; }
+    .match-box p { min-height: 0; margin: 5px 0 10px; font-size: 9px; }
+    .match-button { width: 100%; padding: 9px; border: 1px solid #aac4af; border-radius: 8px; color: var(--moss-deep); background: #fff; font-size: 10px; font-weight: 800; }
+    .match-button:hover { background: #f6fbf5; }
+
+    .guardrail { padding: 20px 0 64px; background: #edf2ec; }
+    .guardrail-inner { display: grid; grid-template-columns: .9fr 2.1fr; max-width: 1440px; margin: 0 auto; padding: 0 40px; gap: 48px; }
+    .guardrail-kicker { margin: 0; color: var(--clay); font-family: "DM Mono", monospace; font-size: 11px; }
+    .guardrail h2 { margin: 11px 0 0; color: var(--ink); font-family: "Nanum Myeongjo", serif; font-size: 27px; letter-spacing: -.06em; line-height: 1.35; }
+    .guardrail-list { display: grid; grid-template-columns: repeat(2, 1fr); gap: 11px; align-self: end; }
+    .guardrail-item { padding: 14px; border-left: 2px solid #b6cfb8; }
+    .guardrail-item b { display: block; color: var(--moss-deep); font-size: 11px; }
+    .guardrail-item span { display: block; margin-top: 6px; color: #6c8177; font-size: 10px; line-height: 1.55; }
+
+    .footer { padding: 24px 40px; color: #81938c; background: var(--ink); font-size: 10px; }
+    .footer-inner { display: flex; justify-content: space-between; max-width: 1440px; margin: 0 auto; gap: 16px; }
+    .footer b { color: #d9e5d9; }
+
+    .modal-backdrop { position: fixed; z-index: 99; inset: 0; display: none; align-items: center; justify-content: center; padding: 18px; background: rgba(13,35,33,.55); backdrop-filter: blur(4px); }
+    .modal-backdrop.open { display: flex; }
+    .modal { width: min(560px, 100%); max-height: 90vh; overflow: auto; padding: 25px; border-radius: 20px; background: var(--paper); box-shadow: 0 30px 80px rgba(0,0,0,.26); }
+    .modal-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 15px; }
+    .modal-head h2 { margin: 0; color: var(--ink); font-family: "Nanum Myeongjo", serif; font-size: 25px; letter-spacing: -.06em; }
+    .modal-close { display: grid; place-items: center; width: 29px; height: 29px; padding: 0; border: 1px solid #d3ded4; border-radius: 50%; color: #587168; background: #fff; font-size: 15px; }
+    .modal-intro { margin: 10px 0 18px; color: #71867c; font-size: 12px; line-height: 1.65; }
+    .passport-large { padding: 16px; border: 1px solid #c9dbcb; border-radius: 15px; background: #f2f7ef; }
+    .passport-large-top { display: flex; align-items: center; justify-content: space-between; padding-bottom: 12px; border-bottom: 1px solid #d4e1d2; color: #386454; font-family: "DM Mono", monospace; font-size: 10px; }
+    .passport-large-top b { font-family: Pretendard, sans-serif; font-size: 12px; }
+    .passport-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-top: 12px; }
+    .passport-cell { padding: 9px; border-radius: 8px; background: rgba(255,255,255,.7); }
+    .passport-cell small { display: block; color: #82948a; font-size: 9px; }
+    .passport-cell b { display: block; margin-top: 4px; color: #47645b; font-size: 11px; }
+    .brief-standard { margin: 11px 0 0; padding: 10px; border: 1px solid #d5e1d5; border-radius: 10px; color: #4f6c62; background: #f5f8f3; font-size: 10px; font-weight: 700; line-height: 1.55; }
+    .transaction-flow { display: flex; flex-wrap: wrap; align-items: center; gap: 5px; margin: 9px 0 0; color: #6c8178; font-size: 8px; font-weight: 800; }
+    .transaction-flow i { color: #a5b3aa; font-style: normal; }
+    .future-tag { display: inline-flex; margin-top: 8px; padding: 4px 7px; border-radius: 999px; color: #866b45; background: #fff1d9; font-size: 8px; font-weight: 800; }
+    .modal-disclaimer { margin: 14px 0 0; padding: 10px; border-radius: 10px; color: #876957; background: #fff5e7; font-size: 10px; line-height: 1.55; }
+    .toast { position: fixed; right: 20px; bottom: 20px; z-index: 110; display: flex; align-items: center; gap: 9px; max-width: 320px; padding: 12px 14px; border: 1px solid #b6cfb8; border-radius: 12px; color: #fff; background: var(--moss-deep); box-shadow: 0 17px 38px rgba(16,44,40,.26); font-size: 11px; line-height: 1.4; opacity: 0; pointer-events: none; transform: translateY(12px); transition: .25s; }
+    .toast.show { opacity: 1; transform: translateY(0); }
+    .toast i { color: #cde8d1; font-style: normal; font-size: 15px; }
+
+    .vr-entry-button { grid-column: 1 / -1; min-height: 44px; border: 1px solid #d39a77; border-radius: 11px; color: #6f402d; background: #fff1e7; font-size: 11px; font-weight: 800; }
+    .vr-entry-button:hover { color: #fff; background: var(--clay); }
+    body.vr-active main > .hero,
+    body.vr-active main > .app-grid,
+    body.vr-active main > .trust-wrap,
+    body.vr-active main > .guardrail,
+    body.vr-active .footer { display: none; }
+    .vr-demo { min-height: calc(100vh - 78px); padding: 34px 40px 70px; background: linear-gradient(180deg, #f1f5ef, var(--paper)); }
+    .vr-demo[hidden] { display: none; }
+    .vr-shell { max-width: 1440px; margin: 0 auto; }
+    .vr-page-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; margin-bottom: 18px; }
+    .vr-page-head h2 { margin: 8px 0 7px; font-family: "Nanum Myeongjo", serif; font-size: clamp(27px, 3.2vw, 47px); line-height: 1.08; letter-spacing: -.04em; }
+    .vr-page-head p { margin: 0; color: #687e75; font-size: 12px; line-height: 1.6; }
+    .vr-prototype-badge { display: inline-flex; align-items: center; gap: 6px; padding: 6px 9px; border-radius: 999px; color: #85563e; background: #fff0df; font-size: 9px; font-weight: 800; }
+    .vr-back-button { flex: 0 0 auto; min-height: 40px; padding: 0 13px; border: 1px solid #c9d7ca; border-radius: 10px; color: var(--moss-deep); background: #fff; font-size: 10px; font-weight: 800; }
+    .vr-layout { display: grid; grid-template-columns: minmax(0, 1.7fr) minmax(310px, .7fr); gap: 16px; align-items: start; }
+    .vr-viewer-card, .vr-side-panel { overflow: hidden; border: 1px solid #d8e2d8; border-radius: 18px; background: #fff; box-shadow: 0 15px 40px rgba(24,49,45,.08); }
+    .vr-card-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 16px; border-bottom: 1px solid #e1e6df; }
+    .vr-card-head b { display: block; font-size: 12px; }
+    .vr-card-head span { color: #789087; font-size: 9px; }
+    .vr-control-hint { white-space: nowrap; }
+    .vr-panorama { width: 100%; height: min(62vh, 620px); min-height: 440px; background: #d9ded7; }
+    .vr-panorama-error { display: grid; place-items: center; height: 100%; min-height: inherit; padding: 28px; color: #6f5648; background: #fff6e9; text-align: center; font-size: 11px; line-height: 1.65; }
+    .vr-panorama .pnlm-container { font-family: Pretendard, system-ui, sans-serif; }
+    .vr-panorama .pnlm-panorama-info { background: rgba(18,51,47,.76); }
+    .vr-panorama .pnlm-hotspot.pnlm-scene { filter: sepia(.4) saturate(.7); }
+    .vr-room-nav { display: grid; grid-template-columns: repeat(4, 1fr); gap: 7px; padding: 12px 14px 9px; }
+    .vr-room-button { min-height: 38px; border: 1px solid #d3ddd4; border-radius: 9px; color: #60766d; background: #fff; font-size: 10px; font-weight: 800; }
+    .vr-room-button.active { color: #fff; border-color: var(--moss-deep); background: var(--moss-deep); }
+    .vr-sample-note { margin: 0 14px 14px; padding: 10px; border-radius: 10px; color: #805d4b; background: #fff6e9; font-size: 9px; line-height: 1.55; }
+    .vr-side-panel { padding: 16px; }
+    .vr-side-panel h3 { margin: 0 0 4px; font-family: "Nanum Myeongjo", serif; font-size: 20px; }
+    .vr-side-intro { margin: 0 0 13px; color: #71857d; font-size: 10px; line-height: 1.55; }
+    .vr-summary { display: grid; gap: 7px; margin-bottom: 14px; }
+    .vr-summary-row { padding: 9px; border-radius: 9px; background: #f3f6f1; }
+    .vr-summary-row small { display: block; margin-bottom: 3px; color: #87978f; font-size: 8px; font-weight: 800; }
+    .vr-summary-row b { display: block; color: #3c5d55; font-size: 10px; line-height: 1.4; }
+    .vr-materials { display: grid; gap: 11px; padding-top: 13px; border-top: 1px solid #e1e7e0; }
+    .vr-material-group > b { display: block; margin-bottom: 6px; font-size: 10px; }
+    .vr-material-options { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 5px; }
+    .vr-material-group[data-group="wall"] .vr-material-options { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .vr-material-option { min-height: 36px; padding: 6px; border: 1px solid #d7dfd6; border-radius: 8px; color: #677c73; background: #fff; font-size: 9px; font-weight: 800; }
+    .vr-material-option span { display: block; margin-top: 2px; color: #a17a61; font-size: 7px; font-weight: 700; }
+    .vr-material-option.active { color: var(--moss-deep); border-color: #789b84; background: #edf5ed; box-shadow: inset 0 0 0 1px #789b84; }
+    .vr-estimate { margin: 14px 0 10px; padding: 12px; border: 1px solid #efcf91; border-radius: 11px; background: #fff9eb; }
+    .vr-estimate small { display: block; color: #a3834d; font-size: 8px; font-weight: 800; }
+    .vr-estimate strong { display: block; margin: 4px 0; color: #6e5327; font-family: "DM Mono", monospace; font-size: 15px; }
+    .vr-estimate span { display: block; color: #9d855f; font-size: 8px; line-height: 1.5; }
+    .vr-quote-button { width: 100%; min-height: 44px; border: 1px solid var(--moss-deep); border-radius: 10px; color: #fff; background: var(--moss-deep); font-size: 10px; font-weight: 800; }
+    .vr-data-note { margin: 9px 0 0; color: #87968f; font-size: 8px; line-height: 1.5; }
+
+    @media (max-width: 980px) {
+      .vr-demo { padding: 26px 20px 58px; }
+      .vr-layout { grid-template-columns: 1fr; }
+      .vr-panorama { height: 56vh; min-height: 390px; }
+      .vr-side-panel { display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr); gap: 14px; }
+      .vr-side-panel > h3, .vr-side-panel > .vr-side-intro, .vr-side-panel > .vr-estimate, .vr-side-panel > .vr-quote-button, .vr-side-panel > .vr-data-note { grid-column: 1 / -1; }
+    }
+    @media (max-width: 680px) {
+      .vr-demo { padding: 20px 12px 42px; }
+      .vr-page-head { align-items: flex-start; flex-direction: column; }
+      .vr-page-head h2 { font-size: 30px; }
+      .vr-back-button { order: -1; }
+      .vr-card-head { align-items: flex-start; flex-direction: column; }
+      .vr-control-hint { white-space: normal; }
+      .vr-panorama { height: 55vh; min-height: 360px; }
+      .vr-room-nav { grid-template-columns: repeat(2, 1fr); }
+      .vr-side-panel { display: block; }
+      .vr-summary { margin-top: 13px; }
+      .vr-materials { margin-top: 12px; }
+    }
+
+    /* Medium desktop / tablet: configuration and plan remain side by side,
+       while the render panel becomes a deliberate two-column card below. */
+    @media (max-width: 1360px) {
+      .app-grid { grid-template-columns: minmax(292px, 320px) minmax(0, 1fr); }
+      .result-panel {
+        grid-column: 1 / -1;
+        display: grid;
+        grid-template-columns: minmax(0, .9fr) minmax(390px, 1.1fr);
+        grid-template-areas:
+          "head visual"
+          "credit visual"
+          "scene-label visual"
+          "scene-selector visual"
+          "scope visual"
+          "actions visual"
+          "note visual"
+          "rule rule"
+          "proof proof";
+        align-items: start;
+      }
+      .result-head { grid-area: head; }
+      .credit-card { grid-area: credit; }
+      .render-frame { grid-area: visual; width: auto; min-height: 348px; margin: 20px 20px 20px 0; align-self: stretch; }
+      .scene-label { grid-area: scene-label; }
+      .scene-selector { grid-area: scene-selector; }
+      .scope-card { grid-area: scope; }
+      .result-actions { grid-area: actions; }
+      .staging-note { grid-area: note; }
+      .stage-line { grid-area: rule; }
+      .proof-row { grid-area: proof; }
+      .trust-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+    @media (max-width: 980px) {
+      .app-grid { grid-template-columns: minmax(0, 1fr); }
+      .control-panel, .studio-panel { grid-column: 1; }
+      .result-panel { display: block; grid-column: 1; }
+      .render-frame { min-height: 0; aspect-ratio: 16 / 10; height: auto; margin: 0 20px; }
+      .trust-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .trust-card:last-child { grid-column: span 2; }
+      .guardrail-inner { grid-template-columns: 1fr; gap: 24px; }
+      .intake-grid { grid-template-columns: 1fr; }
+      .engine-output { grid-template-columns: 1fr; }
+      .reference-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    }
+    @media (max-width: 780px) {
+      .nav, .hero-inner, .app-grid, .trust-wrap, .guardrail-inner { padding-left: 18px; padding-right: 18px; }
+      .nav { height: 65px; }
+      .nav-links { display: none; }
+      .hero { min-height: 246px; }
+      .hero-inner { padding-top: 36px; padding-bottom: 38px; }
+      .promise-row { gap: 5px; margin-top: 17px; }
+      .promise-row span { padding: 6px 8px; font-size: 9px; }
+      .hero-orb { right: -55px; bottom: -65px; }
+      .app-grid { display: flex; flex-direction: column; margin-top: -20px; padding-bottom: 45px; }
+      .app-grid > * { width: 100%; }
+      .result-panel { display: block; }
+      .render-frame { min-height: 0; aspect-ratio: 4 / 3; height: auto; margin: 0 20px; }
+      .result-head, .credit-card, .result-actions, .staging-note, .proof-row { display: block; }
+      .result-actions { display: grid; }
+      .stage-line { display: block; }
+      .proof-row { display: grid; }
+      .plan-stage { min-height: 385px; margin-right: 13px; margin-left: 13px; }
+      .floorplan { inset: 39px 7px 30px; width: calc(100% - 14px); height: calc(100% - 69px); }
+      .iso-stage { padding-right: 10px; padding-left: 10px; }
+      .iso-hotspot { padding: 5px 6px; font-size: 8px; }
+      .iso-hotspot.living { left: 43%; }
+      .iso-hotspot.master { right: 8%; }
+      .iso-hotspot.small { left: 7%; }
+      .iso-hotspot.bath { right: 12%; }
+      .plan-svg-label { font-size: 13px; }
+      .plan-svg-small { font-size: 9px; }
+      .room-chip-row { padding-left: 13px; padding-right: 13px; }
+      .studio-top { padding: 0 13px; }
+      .source-badge { font-size: 8px; }
+      .view-tabs { padding-left: 13px; }
+      .trust-grid, .guardrail-list { grid-template-columns: 1fr; }
+      .trust-card:last-child { grid-column: auto; }
+      .guardrail-inner { grid-template-columns: 1fr; gap: 24px; }
+      .section-heading { align-items: flex-start; flex-direction: column; gap: 10px; }
+      .footer { padding-left: 18px; padding-right: 18px; }
+      .footer-inner { flex-direction: column; }
+      .intake-panel { padding: 16px; }
+      .intake-head { align-items: flex-start; flex-direction: column; gap: 8px; }
+      .choice-grid, .checkbox-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .reference-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .quick-budgets { grid-template-columns: repeat(3, 1fr); }
+      .engine-flow { grid-template-columns: repeat(2, 1fr); gap: 6px; }
+      .engine-flow span:not(:last-child)::after { display: none; }
+      .engine-adjustment ul { grid-template-columns: repeat(2, 1fr); }
+      .scope-status-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+    @media (max-width: 420px) {
+      .studio-top { flex-wrap: wrap; gap: 8px; padding-top: 13px; }
+      .address-block { min-width: 0; }
+      .address-block div { min-width: 0; }
+      .address-block b, .address-block small { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+      .source-badge { margin-left: 24px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page-shell">
+    <div class="top-line"></div>
+    <nav class="nav" aria-label="주 메뉴">
+      <a href="#" class="brand" aria-label="집안 홈">
+        <span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M4.5 10.4 12 4l7.5 6.4v7.1a1.5 1.5 0 0 1-1.5 1.5H6a1.5 1.5 0 0 1-1.5-1.5v-7.1Z" stroke="currentColor" stroke-width="1.55" stroke-linejoin="round"/><path d="M9.3 18.8v-5.5h5.4v5.5" stroke="currentColor" stroke-width="1.55" stroke-linejoin="round"/><path d="m16.7 8.5 1.1 1.1 2-2" stroke="#EFC56F" stroke-width="1.45" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <span class="brand-name">집안</span>
+      </a>
+      <div class="nav-links">
+        <a href="#taste-step">리모델링 시작</a>
+        <a href="#outcome-step">예산 분석</a>
+        <a href="#trust">공사 브리프</a>
+        <a href="#guardrail">운영 원칙</a>
+      </div>
+      <div class="profile"><span>웹 MVP · Prototype</span><span class="profile-dot">집</span></div>
+    </nav>
+
+    <main>
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="hero-inner">
+          <p class="eyebrow"><span class="dot"></span> 집을 안심하고 맡긴다.</p>
+          <h1 id="hero-title">내가 꿈꾸던 집을<br>내 예산 안에서 현실로.</h1>
+          <p class="hero-copy">취향과 우리 집 조건, 예산을 정리해 <strong>실제 견적에 활용할 수 있는 공사조건</strong>을 만들고, 적합한 시공사의 견적 비교까지 연결합니다.</p>
+          <div class="promise-row" aria-label="집안 핵심 가치"><span><i></i> 업체를 찾기 전 공사조건부터</span><span><i></i> 같은 조건으로 견적 비교</span><span><i></i> 현장 확인 후 범위 확정</span></div>
+          <div class="journey-row" aria-label="고객 여정"><span><b>01</b> 취향 선택</span><i>→</i><span><b>02</b> 우리 집</span><i>→</i><span><b>03</b> 예산·우선순위</span><i>→</i><span><b>04</b> 가능한 공사</span><i>→</i><span><b>05</b> 브리프·견적 비교</span></div>
+          <div class="hero-actions"><a class="hero-cta" href="#taste-step">우리 집 리모델링 시작하기</a><span class="hero-audience">수도권 아파트 실거주 리모델링을 준비하는 고객을 위한 의사결정 플랫폼</span></div>
+        </div>
+        <div class="hero-orb" aria-hidden="true"></div>
+      </section>
+
+      <section id="simulator" class="app-grid" aria-label="리모델링 시뮬레이터">
+        <section class="panel intake-panel" aria-labelledby="intake-title">
+          <div class="intake-head">
+            <div>
+              <p class="eyebrow" style="color:#658c78;margin-bottom:6px;"><span class="dot" style="background:#c77a55;box-shadow:none;"></span> 집안 · 웹 MVP</p>
+              <h2 id="intake-title">업체를 찾기 전에, 우리 집 공사조건부터 정합니다.</h2>
+              <div class="workflow-nav" aria-label="입력 단계 바로가기"><a href="#taste-step">01 취향 선택·정리</a><a href="#home-step">02 우리 집</a><a href="#budget-step">03 예산</a><a href="#priority-step">04 우선순위</a><a href="#outcome-step">05 가능한 공사</a></div>
+            </div>
+            <p>원하는 느낌을 생활언어와 사진으로 알려주세요. 집안은 그 내용을 색상·마감·공사범위·우선순위로 정리해 여러 시공사에 동일하게 전달할 브리프를 만듭니다.</p>
+          </div>
+
+          <div class="intake-grid">
+            <article id="home-step" class="intake-step" aria-labelledby="work-plan-title">
+              <div class="intake-step-head"><strong id="work-plan-title">우리 집과 공사 계획</strong><span>03 · HOME</span></div>
+              <label for="complex-search" class="question-label">아파트 단지 또는 주소</label>
+              <div class="search-field">
+                <span class="search-icon">⌕</span>
+                <input id="complex-search" type="search" autocomplete="off" value="판교원마을 9단지 한림풀에버" aria-expanded="false" aria-controls="complex-list">
+                <div id="complex-list" class="search-list" role="listbox"></div>
+              </div>
+              <span class="question-label">면적 선택</span>
+              <div class="unit-picker" role="group" aria-label="평형 선택">
+                <button class="unit-option" data-unit="84㎡A"><b>84㎡A</b><small>34평형</small></button>
+                <button class="unit-option active" data-unit="96.86㎡"><b>96.86㎡</b><small>39평형</small></button>
+                <button class="unit-option" data-unit="109.11㎡"><b>109.11㎡</b><small>43평형</small></button>
+              </div>
+              <span class="question-label">어떤 공사를 계획하고 계신가요?</span>
+              <div class="choice-row" role="group" aria-label="전체 또는 부분 리모델링">
+                <button type="button" class="choice-pill work-type active" data-work-type="whole">전체 리모델링</button>
+                <button type="button" class="choice-pill work-type" data-work-type="partial">부분 리모델링</button>
+              </div>
+              <div id="partial-room-block" class="conditional-block" hidden>
+                <span class="question-label">바꾸고 싶은 공간과 공정을 모두 골라주세요.</span>
+                <div class="checkbox-grid">
+                  <label class="check-choice"><input type="checkbox" name="partial-room" value="거실">거실</label>
+                  <label class="check-choice"><input type="checkbox" name="partial-room" value="주방">주방</label>
+                  <label class="check-choice"><input type="checkbox" name="partial-room" value="욕실">욕실</label>
+                  <label class="check-choice"><input type="checkbox" name="partial-room" value="안방">안방</label>
+                  <label class="check-choice"><input type="checkbox" name="partial-room" value="작은방">작은방</label>
+                  <label class="check-choice"><input type="checkbox" name="partial-room" value="현관">현관</label>
+                  <label class="check-choice"><input type="checkbox" name="partial-room" value="발코니">발코니</label>
+                  <label class="check-choice"><input type="checkbox" name="partial-room" value="바닥">바닥</label>
+                  <label class="check-choice"><input type="checkbox" name="partial-room" value="벽·도배">벽·도배</label>
+                  <label class="check-choice"><input type="checkbox" name="partial-room" value="조명">조명</label>
+                  <label class="check-choice"><input type="checkbox" name="partial-room" value="수납">수납</label>
+                </div>
+              </div>
+              <span class="question-label">이번 공사에서 가장 해결하고 싶은 것은 무엇인가요?</span>
+              <div class="checkbox-grid">
+                <label class="check-choice"><input type="checkbox" name="need" value="노후 개선">노후 개선</label>
+                <label class="check-choice"><input type="checkbox" name="need" value="수납 부족">수납 부족</label>
+                <label class="check-choice"><input type="checkbox" name="need" value="공간 동선">공간 동선</label>
+                <label class="check-choice"><input type="checkbox" name="need" value="집이 어두움">집이 어두움</label>
+                <label class="check-choice"><input type="checkbox" name="need" value="아이 중심 공간">아이 중심 공간</label>
+                <label class="check-choice"><input type="checkbox" name="need" value="고급스러운 분위기">고급스러운 분위기</label>
+                <label class="check-choice"><input type="checkbox" name="need" value="가성비">가성비</label>
+                <label class="check-choice"><input type="checkbox" name="need" value="유지관리 편의">유지관리 편의</label>
+              </div>
+            </article>
+
+            <article id="taste-step" class="intake-step" aria-labelledby="taste-title">
+              <div class="intake-step-head"><strong id="taste-title">어떤 집을 원하세요?</strong><span>01–02 · TASTE</span></div>
+              <div class="method-tabs" role="tablist" aria-label="취향 찾기 방식">
+                <button type="button" class="method-tab active" data-taste-method="gallery" role="tab" aria-selected="true">사진을 보면서 찾기<small>준비된 공간을 복수 선택</small></button>
+                <button type="button" class="method-tab" data-taste-method="upload" role="tab" aria-selected="false">좋아하는 사진 올리기<small>내 사진의 썸네일만 표시</small></button>
+              </div>
+              <div id="taste-gallery" class="taste-method">
+                <span class="question-label">마음에 드는 공간을 골라주세요.</span>
+                <div class="reference-grid">
+                  <button type="button" class="reference-card active" data-ref="warm-living" data-ref-style="wood"><img src="assets/minimal-wood-living-room.png" alt="밝은 우드 거실"><span>밝은 우드 거실</span></button>
+                  <button type="button" class="reference-card" data-ref="beige-living" data-ref-style="beige"><img src="assets/scenes/render-39-beige-standard-living.png" alt="내추럴 베이지 거실"><span>내추럴 베이지</span></button>
+                  <button type="button" class="reference-card" data-ref="soft-kitchen" data-ref-style="soho"><img src="assets/scenes/render-39-soho-standard-living.png" alt="소프트 모던 주방과 거실"><span>소프트 모던</span></button>
+                  <button type="button" class="reference-card" data-ref="deep-living" data-ref-style="deep"><img src="assets/scenes/render-39-deep-standard-living.png" alt="딥 모던 거실"><span>딥 모던</span></button>
+                  <button type="button" class="reference-card" data-ref="warm-bedroom" data-ref-style="wood"><img src="assets/aether-master-bedroom.png" alt="따뜻한 안방"><span>따뜻한 안방</span></button>
+                  <button type="button" class="reference-card" data-ref="clean-bath" data-ref-style="beige"><img src="assets/aether-bathroom.png" alt="정돈된 욕실"><span>정돈된 욕실</span></button>
+                </div>
+                <div class="preference-reasons">
+                  <span class="question-label">어떤 점이 마음에 드나요?</span>
+                  <div class="choice-row">
+                    <button type="button" class="choice-pill taste-reason active" data-reason="전체 분위기">전체 분위기</button>
+                    <button type="button" class="choice-pill taste-reason" data-reason="색상">색상</button>
+                    <button type="button" class="choice-pill taste-reason" data-reason="바닥">바닥</button>
+                    <button type="button" class="choice-pill taste-reason" data-reason="벽">벽</button>
+                    <button type="button" class="choice-pill taste-reason" data-reason="가구">가구</button>
+                    <button type="button" class="choice-pill taste-reason" data-reason="주방">주방</button>
+                    <button type="button" class="choice-pill taste-reason" data-reason="조명">조명</button>
+                    <button type="button" class="choice-pill taste-reason" data-reason="수납">수납</button>
+                  </div>
+                </div>
+              </div>
+              <div id="taste-upload" class="taste-method" hidden>
+                <label id="upload-drop" class="upload-drop" for="taste-files">
+                  <b>인테리어 사진이나 스크린샷을 놓아주세요.</b>
+                  <span>여러 장 선택할 수 있습니다. 이 데모는 파일을 외부로 전송하지 않고 브라우저에서 썸네일만 보여줍니다.</span>
+                  <span class="upload-button">파일 선택</span>
+                  <input id="taste-files" type="file" accept="image/*" multiple>
+                </label>
+                <div id="upload-preview" class="upload-preview" aria-live="polite"></div>
+              </div>
+              <div class="analyze-row">
+                <small>생활언어와 사진을 공사조건으로 정리하는 취향 분석 데모입니다. 실제 자동 이미지 분석은 연결되지 않았습니다.</small>
+                <button id="analyze-taste" type="button" class="analyze-button">내 취향 분석하기</button>
+              </div>
+              <div id="taste-profile" class="taste-profile" hidden>
+                <div class="profile-title"><b>당신의 취향을 이렇게 이해했어요.</b><span class="prototype-badge">프로토타입 분석 결과</span></div>
+                <div class="profile-grid">
+                  <div class="profile-item"><small>전체 분위기</small><span id="profile-mood">따뜻하고 정돈된 공간</span></div>
+                  <div class="profile-item"><small>색상</small><span id="profile-color">웜화이트 · 베이지 · 라이트우드</span></div>
+                  <div class="profile-item"><small>바닥</small><span id="profile-floor">밝은 오크 계열</span></div>
+                  <div class="profile-item"><small>벽</small><span id="profile-wall">저채도 · 무광</span></div>
+                  <div class="profile-item"><small>주방</small><span id="profile-kitchen">심플한 평판형 도어</span></div>
+                  <div class="profile-item"><small>조명·공간</small><span id="profile-light">간접조명 · 개방감과 수납</span></div>
+                </div>
+                <div class="profile-actions"><button id="confirm-taste" type="button">네, 제 취향과 비슷해요</button><button id="edit-taste" type="button">조금 수정할게요</button></div>
+                <div id="profile-edit" class="profile-edit" hidden>
+                  <label>분위기<input id="edit-mood" value="따뜻하고 정돈된 공간"></label>
+                  <label>색상<input id="edit-color" value="웜화이트 · 베이지 · 라이트우드"></label>
+                </div>
+              </div>
+            </article>
+
+            <article id="budget-step" class="intake-step" aria-labelledby="budget-title">
+              <div class="intake-step-head"><strong id="budget-title">예산과 가장 지키고 싶은 것</strong><span>04 · BUDGET</span></div>
+              <label for="budget-input" class="question-label">총 공사예산</label>
+              <div class="budget-input-wrap"><input id="budget-input" inputmode="numeric" value="50,000,000" aria-describedby="budget-range"><span>원</span></div>
+              <div id="budget-range" class="budget-helper"><span>최소 3,000,000원</span><span>최대 500,000,000원</span></div>
+              <div class="quick-budgets" aria-label="예산 빠른 선택">
+                <button type="button" class="quick-budget" data-amount="10000000">1,000만원</button>
+                <button type="button" class="quick-budget" data-amount="30000000">3,000만원</button>
+                <button type="button" class="quick-budget active" data-amount="50000000">5,000만원</button>
+                <button type="button" class="quick-budget" data-amount="70000000">7,000만원</button>
+                <button type="button" class="quick-budget" data-amount="100000000">1억원</button>
+                <button type="button" class="quick-budget" data-amount="200000000">2억원</button>
+                <button type="button" class="quick-budget" data-amount="custom">직접입력</button>
+              </div>
+              <span class="question-label">예산 안에서 무엇을 가장 지키고 싶으신가요?</span>
+              <div class="choice-grid" role="radiogroup" aria-label="예산 우선순위">
+                <button type="button" class="choice-pill budget-priority active" data-priority="총 예산">총 예산</button>
+                <button type="button" class="choice-pill budget-priority" data-priority="원하는 디자인">원하는 디자인</button>
+                <button type="button" class="choice-pill budget-priority" data-priority="자재 품질">자재 품질</button>
+                <button type="button" class="choice-pill budget-priority" data-priority="공사 범위">공사 범위</button>
+              </div>
+            </article>
+
+            <article id="priority-step" class="intake-step" aria-labelledby="constraint-title">
+              <div class="intake-step-head"><strong id="constraint-title">반드시·가능하면·그대로</strong><span>04 · PRIORITY</span></div>
+              <span class="question-label">반드시 하고 싶은 공사가 있나요?</span>
+              <div class="checkbox-grid">
+                <label class="check-choice"><input type="checkbox" name="must" value="주방">주방</label>
+                <label class="check-choice"><input type="checkbox" name="must" value="욕실">욕실</label>
+                <label class="check-choice"><input type="checkbox" name="must" value="바닥">바닥</label>
+                <label class="check-choice"><input type="checkbox" name="must" value="벽·도배">벽·도배</label>
+                <label class="check-choice"><input type="checkbox" name="must" value="조명">조명</label>
+                <label class="check-choice"><input type="checkbox" name="must" value="수납">수납</label>
+                <label class="check-choice"><input type="checkbox" name="must" value="방수">방수</label>
+                <label class="check-choice"><input type="checkbox" name="must" value="필수 설비">필수 설비</label>
+              </div>
+              <span class="question-label">예산이 되면 바꾸고 싶은 것은 무엇인가요?</span>
+              <div class="checkbox-grid">
+                <label class="check-choice"><input type="checkbox" name="nice" value="주방 전체교체">주방 전체교체</label>
+                <label class="check-choice"><input type="checkbox" name="nice" value="욕실 전체교체">욕실 전체교체</label>
+                <label class="check-choice"><input type="checkbox" name="nice" value="맞춤 수납">맞춤 수납</label>
+                <label class="check-choice"><input type="checkbox" name="nice" value="간접조명">간접조명</label>
+                <label class="check-choice"><input type="checkbox" name="nice" value="고급 마감">고급 마감</label>
+                <label class="check-choice"><input type="checkbox" name="nice" value="창호 교체">창호 교체</label>
+              </div>
+              <span class="question-label">현재 집에서 유지하고 싶은 것이 있나요?</span>
+              <div class="checkbox-grid">
+                <label class="check-choice"><input type="checkbox" name="keep" value="창호">창호</label>
+                <label class="check-choice"><input type="checkbox" name="keep" value="바닥">바닥</label>
+                <label class="check-choice"><input type="checkbox" name="keep" value="주방">주방</label>
+                <label class="check-choice"><input type="checkbox" name="keep" value="욕실">욕실</label>
+                <label class="check-choice"><input type="checkbox" name="keep" value="방문">방문</label>
+                <label class="check-choice"><input type="checkbox" name="keep" value="붙박이장">붙박이장</label>
+                <label class="check-choice"><input type="checkbox" name="keep" value="없음">없음</label>
+              </div>
+              <span class="question-label">알고 있는 현장 특이사항이 있나요?</span>
+              <div class="checkbox-grid">
+                <label class="check-choice"><input type="checkbox" name="site" value="누수">누수</label>
+                <label class="check-choice"><input type="checkbox" name="site" value="결로">결로</label>
+                <label class="check-choice"><input type="checkbox" name="site" value="구조 변경">구조 변경</label>
+                <label class="check-choice"><input type="checkbox" name="site" value="배관 대이동">배관 대이동</label>
+                <label class="check-choice"><input type="checkbox" name="site" value="전기 용량">전기 용량</label>
+                <label class="check-choice"><input type="checkbox" name="site" value="창호 상태">창호 상태</label>
+                <label class="check-choice"><input type="checkbox" name="site" value="모름">모름</label>
+              </div>
+            </article>
+
+            <article id="outcome-step" class="engine-card" aria-labelledby="engine-title">
+              <div class="engine-head"><h3 id="engine-title">내 예산에서 가능한 공사</h3><span class="prototype-badge">집안 · 프로토타입 예상 범위</span></div>
+              <div class="engine-flow" aria-label="예산 현실성 분석 흐름"><span>고객 요구사항</span><span>공사 항목 분류</span><span>예상 범위 검토</span><span>고객 예산 비교</span><span>가능 범위 조정</span><span>가상 리모델링</span></div>
+              <div class="engine-output">
+                <div class="engine-summary"><small>현재 분석</small><b id="engine-status">선택 범위 조정 검토</b><span id="engine-copy">입력한 예산과 전체 리모델링 요청을 비교해, 우선 반영할 공사를 정리합니다.</span></div>
+                <div class="engine-adjustment"><small>예산을 넘을 가능성이 있을 때의 조정 순서</small><p id="engine-adjustment-copy">예산에 맞는 대안을 함께 제시합니다. 방수·누수·필수 설비와 고객이 반드시 선택한 공사는 가능한 한 우선 유지합니다.</p><ul><li>1. 불필요한 고급 옵션 조정</li><li>2. 자재 등급 조정</li><li>3. 전체교체 → 부분교체</li><li>4. 비필수 범위 축소</li></ul><div id="site-badges" class="site-badges"><span>현장 검토 필요 · 구조</span><span>현장 검토 필요 · 설비</span><span>현장 검토 필요 · 실측</span></div></div>
+              </div>
+              <div class="scope-status-grid" aria-label="공사범위 분류 결과">
+                <div class="scope-status possible"><b>가능한 공사</b><span id="possible-work">바닥·벽·조명과 기본 마감</span></div>
+                <div class="scope-status adjust"><b>조정이 필요한 공사</b><span id="adjusted-work">자재 등급과 교체 범위 조정</span></div>
+                <div class="scope-status defer"><b>보류할 공사</b><span id="deferred-work">비필수 고급 옵션</span></div>
+                <div class="scope-status review"><b>현장 검토 필요</b><span id="review-work">구조·설비·방수·실측</span></div>
+              </div>
+              <p class="staging-note" style="margin:11px 0 0;"><b>MVP 안내</b><span>현재 MVP는 입력 예산에 따른 공사범위 의사결정 로직을 검증하기 위한 프로토타입입니다. 실제 견적 데이터와 공사비 DB를 연결해 고도화할 예정이며, 최종 견적은 현장 확인 후 달라질 수 있습니다.</span></p>
+            </article>
+          </div>
+        </section>
+        <aside class="panel control-panel" aria-label="시뮬레이션 설정">
+          <div class="panel-label"><span><span class="step">06</span> 결과 시안 빠른 수정</span><span class="tiny-status"><i></i> 입력값 연동</span></div>
+
+          <span class="input-label">대표 시안 범위</span>
+          <div class="scope-picker" role="group" aria-label="공사의 범위 선택">
+            <button class="scope-option active" data-scope="whole">집 전체<small>전 공간 리모델링</small></button>
+            <button class="scope-option" data-scope="living">거실 · 주방<small>공용부 중심</small></button>
+            <button class="scope-option" data-scope="bathroom1">욕실 1개<small>한 곳만 새로</small></button>
+            <button class="scope-option" data-scope="bathroom2">욕실 2개<small>두 곳 함께</small></button>
+            <button class="scope-option" data-scope="room">방 1개<small>안방 또는 작은방</small></button>
+          </div>
+          <p id="scope-guide" class="scope-guide">이번 예산과 시안은 집 전체 기준입니다. 선택하지 않은 공간은 범위에서 제외됩니다.</p>
+
+          <span class="input-label">분석 결과 빠른 수정 · 무드</span>
+          <div class="style-grid" role="group" aria-label="인테리어 스타일 선택">
+            <button class="style-card style-wood active" data-style="wood"><b>미니멀 우드</b><small>따뜻한 결 · 절제된 선</small></button>
+            <button class="style-card style-soho" data-style="soho"><b>소프트 모던</b><small>그레이 · 낮은 대비</small></button>
+            <button class="style-card style-beige" data-style="beige"><b>내추럴 베이지</b><small>빛 · 질감 · 여백</small></button>
+            <button class="style-card style-deep" data-style="deep"><b>딥 모던</b><small>단단한 소재감</small></button>
+          </div>
+
+          <span id="budget-label" class="input-label">예산에 맞춘 시안 단계</span>
+          <div class="budget-row" role="group" aria-label="예산 선택">
+            <button class="budget-option" data-budget="refresh">핵심<br>개선</button>
+            <button class="budget-option active" data-budget="standard">균형<br>조정</button>
+            <button class="budget-option" data-budget="premium">디테일<br>강화</button>
+          </div>
+
+          <div class="quiet-note">
+            <span>⌁</span>
+            <span><b>프로토타입 탐색</b><br>입력 예산에 따라 준비된 시안과 포함·제외 설명이 함께 바뀝니다. 실제 견적이나 실시간 생성 결과가 아닙니다.</span>
+          </div>
+        </aside>
+
+        <section class="panel studio-panel" aria-label="도면 뷰어">
+          <div class="studio-top">
+            <div class="address-block">
+              <span class="pin">⌖</span>
+              <div><small id="address-line">경기도 성남시 분당구 서판교로 29</small><b id="complex-name">판교원마을 9단지 한림풀에버</b></div>
+            </div>
+            <span class="source-badge">UI 샘플 레이아웃 · 실제 도면 아님</span>
+          </div>
+          <div class="view-tabs" role="tablist" aria-label="도면 보기 방식">
+            <button class="view-tab active" data-view="iso" role="tab" aria-selected="true">아이소메트릭 기본 도면</button>
+            <button class="view-tab" data-view="plan" role="tab" aria-selected="false">2D 평면도</button>
+          </div>
+          <div id="plan-stage" class="plan-stage" data-unit="96.86㎡">
+            <div class="plan-meta"><b id="unit-label">96.86㎡</b><span id="unit-subtitle">39평형 · 4Bay</span></div>
+            <div class="plan-key"><span><i></i> UI용 공간 연출</span><span><i class="wet"></i> 실제 도면 연동 전</span></div>
+            <svg id="floorplan" class="floorplan hidden" viewBox="0 0 800 520" aria-label="아파트 2D 평면도" role="img">
+              <rect x="74" y="60" width="650" height="374" rx="4" fill="#fffdfa" class="plan-wall"></rect>
+              <rect x="85" y="69" width="290" height="196" class="room room-living"></rect>
+              <rect x="380" y="69" width="166" height="196" class="room room-bedroom"></rect>
+              <rect x="551" y="69" width="162" height="196" class="room room-bedroom"></rect>
+              <rect x="85" y="270" width="142" height="153" class="room room-bedroom"></rect>
+              <rect x="232" y="270" width="143" height="153" class="room room-bedroom"></rect>
+              <rect x="380" y="270" width="110" height="153" class="room room-wet"></rect>
+              <rect x="495" y="270" width="109" height="153" class="room room-hall"></rect>
+              <rect x="609" y="270" width="104" height="153" class="room room-wet"></rect>
+              <rect x="85" y="23" width="290" height="34" rx="2" class="room room-balcony"></rect>
+              <rect x="380" y="23" width="333" height="34" rx="2" class="room room-balcony"></rect>
+              <rect x="28" y="270" width="45" height="153" rx="2" class="room room-balcony"></rect>
+              <path d="M 375 167 H 380 M 546 167 H 551 M 227 347 H 232 M 375 347 H 380 M 490 347 H 495 M 604 347 H 609" class="plan-door"></path>
+              <path d="M 74 335 A 42 42 0 0 1 116 377 M 724 335 A 42 42 0 0 0 682 377" class="plan-door"></path>
+              <g>
+                <text x="230" y="153" class="plan-svg-label">거실 · 주방</text>
+                <text x="230" y="175" class="plan-svg-small">공간 연출 선택됨</text>
+                <text x="463" y="153" class="plan-svg-label">안방</text>
+                <text x="463" y="175" class="plan-svg-small">드레스룸 연계</text>
+                <text x="632" y="153" class="plan-svg-label">침실 2</text>
+                <text x="632" y="175" class="plan-svg-small">가변 벽체 확인</text>
+                <text x="156" y="344" class="plan-svg-label">침실 3</text>
+                <text x="304" y="344" class="plan-svg-label">침실 4</text>
+                <text x="435" y="342" class="plan-svg-small">공용 욕실</text>
+                <text x="550" y="342" class="plan-svg-small">현관 · 팬트리</text>
+                <text x="661" y="342" class="plan-svg-small">안방 욕실</text>
+                <text x="230" y="45" class="plan-svg-sub">발코니</text>
+                <text x="546" y="45" class="plan-svg-sub">발코니</text>
+              </g>
+              <g opacity=".52">
+                <rect x="125" y="126" width="95" height="45" rx="4" fill="#fff" stroke="#7ea78a" stroke-width="2"></rect>
+                <rect x="271" y="101" width="67" height="110" rx="4" fill="#f6e6c3" stroke="#a97749" stroke-width="2"></rect>
+                <circle cx="304" cy="156" r="17" fill="#f9faf6" stroke="#a97749" stroke-width="2"></circle>
+                <rect x="410" y="120" width="100" height="52" rx="4" fill="#fff" stroke="#af9b78" stroke-width="2"></rect>
+              </g>
+            </svg>
+            <div id="iso-view" class="iso-stage" aria-label="아파트 전체 아이소메트릭 기본 도면">
+              <img id="iso-image" class="iso-image" src="assets/aether-isometric-floorplan.png" alt="96.86제곱미터 아파트 아이소메트릭 도면">
+              <button type="button" class="iso-hotspot living active" data-room="거실 · 주방">거실 · 주방</button>
+              <button type="button" class="iso-hotspot master" data-room="안방">안방</button>
+              <button type="button" class="iso-hotspot small" data-room="작은방">작은방</button>
+              <button type="button" class="iso-hotspot bath" data-room="욕실">욕실</button>
+              <button type="button" class="iso-hotspot bath-two" data-room="욕실 2">욕실 2</button>
+            </div>
+          </div>
+          <div class="room-chip-row" aria-label="공간 선택">
+            <button class="room-chip active" data-room="거실 · 주방">거실 · 주방</button>
+            <button class="room-chip" data-room="안방">안방</button>
+            <button class="room-chip" data-room="작은방">작은방</button>
+            <button class="room-chip" data-room="욕실">욕실</button>
+            <button class="room-chip" data-room="욕실 2">욕실 2</button>
+          </div>
+        </section>
+
+        <aside class="panel result-panel" aria-label="가상 리모델링 결과">
+          <div class="result-head">
+            <div class="panel-label"><span><span class="step">07</span> 예산 안의 리모델링 모습</span><span class="tiny-status"><i></i> 시나리오 프리뷰</span></div>
+            <h2 id="result-title">미니멀 우드의 거실</h2>
+            <p id="result-copy">정돈된 우드 톤과 충분한 여백으로, 가족의 움직임이 자연스러운 공간.</p>
+          </div>
+          <div class="credit-card">
+            <span class="credit-icon">✦</span>
+            <div><b>예산과 범위를 함께 반영한 시안</b><span>현재 단계에서는 준비된 이미지로 동작을 검증합니다</span></div>
+          </div>
+          <div class="render-frame">
+            <div id="render-sprite" class="render-sprite"><img id="render-image" src="assets/scenes/render-39-wood-standard-living.png" alt="미니멀 우드, 5,000~8,000만 원 기준으로 연출된 거실·주방"></div>
+            <div class="render-overlay"></div>
+            <span id="render-label" class="render-label"><i></i> 가상 리모델링 · 프로토타입 예산 시나리오</span>
+            <div class="render-caption"><strong id="render-style">Minimal wood</strong><span id="render-meta">거실 · 주방 · 입력 예산 50,000,000원</span></div>
+            <div id="rendering-layer" class="rendering-layer"><div class="rendering-content"><div class="rendering-ring"></div><b>선택한 조건으로 연출 중</b><span>데모에서는 준비된 프리뷰를 보여드립니다</span></div></div>
+          </div>
+          <div id="bathroom-preview-pair" class="bathroom-preview-pair" hidden aria-label="욕실 두 곳의 실사 시안">
+            <div class="bathroom-preview"><img id="bathroom-one-image" alt="욕실 1 리모델링 시안"><span>욕실 1 · 공용 욕실</span></div>
+            <div class="bathroom-preview"><img id="bathroom-two-image" alt="욕실 2 리모델링 시안"><span>욕실 2 · 안방 욕실</span></div>
+          </div>
+          <div class="scene-label"><span id="scene-label">공간별 실사 시안</span><span id="scene-summary">거실 · 안방 · 작은방 · 욕실</span></div>
+          <div class="scene-selector" aria-label="공간별 실사 시안 선택">
+            <button class="scene-thumb active" data-room="거실 · 주방"><span class="scene-thumb-image" aria-hidden="true"></span><span>거실 · 주방</span></button>
+            <button class="scene-thumb" data-room="안방"><span class="scene-thumb-image" aria-hidden="true"></span><span>안방</span></button>
+            <button class="scene-thumb" data-room="작은방"><span class="scene-thumb-image" aria-hidden="true"></span><span>작은방</span></button>
+            <button class="scene-thumb" data-room="욕실"><span class="scene-thumb-image" aria-hidden="true"></span><span>욕실</span></button>
+            <button class="scene-thumb" data-room="욕실 2"><span class="scene-thumb-image" aria-hidden="true"></span><span>욕실 2</span></button>
+          </div>
+          <div class="scope-card" aria-label="예산별 시안 범위">
+            <div class="scope-top"><b id="scope-title">전 공간 스탠더드</b><span id="scope-basis">전용 85㎡ 전후 · 현장 상태에 따라 달라질 수 있음</span></div>
+            <div class="scope-grid">
+              <div class="scope-item"><small>이번 시안에서 바뀐 부분</small><span id="scope-changed">전 공간 바닥·벽·조명, 주방 도어·상판, 욕실 기본 교체</span></div>
+              <div class="scope-item"><small>유지 / 범위 제외</small><span id="scope-retained">내력벽·창호 전체·배관 대이동은 현장 검토 전 제외</span></div>
+            </div>
+          </div>
+          <div class="result-actions">
+            <button id="render-button" class="primary-button">이 조건으로 가상 리모델링 보기</button>
+            <button id="passport-button" class="secondary-button" title="리모델링 브리프 열기" aria-label="리모델링 브리프 열기">⌘</button>
+            <button id="vr-entry-button" class="vr-entry-button">360° VR로 우리 집 둘러보기</button>
+          </div>
+          <p class="staging-note"><b>연출 안내</b><span>가구는 공간감과 동선을 이해하기 위한 배치 예시입니다. 선택 범위 밖 공간·구조 변경은 포함하지 않으며, 시공 조건은 현장 확인 뒤 확정합니다.</span></p>
+          <div class="stage-line"></div>
+          <div class="proof-row">
+            <div class="proof-item"><strong>◌ 현장 검토 필요</strong><span>구조·설비·실측 전에는 컨셉 단계로 표시됩니다.</span></div>
+            <div class="proof-item"><strong>⌁ 입력 예산</strong><span id="proof-budget">50,000,000원 · 프로토타입 시나리오</span></div>
+          </div>
+        </aside>
+      </section>
+
+      <section id="vr-demo" class="vr-demo" aria-labelledby="vr-title" hidden>
+        <div class="vr-shell">
+          <header class="vr-page-head">
+            <div>
+              <span class="vr-prototype-badge">판교원마을9단지 예시 리모델링 · Prototype</span>
+              <h2 id="vr-title">우리 집 리모델링을<br>360°로 미리 체험해보세요</h2>
+              <p>선택한 취향과 공사 조건을 공간 안에서 확인할 수 있습니다.</p>
+            </div>
+            <button id="vr-back-button" class="vr-back-button">← 결과 화면으로 돌아가기</button>
+          </header>
+
+          <div class="vr-layout">
+            <article class="vr-viewer-card" aria-labelledby="vr-viewer-title">
+              <div class="vr-card-head">
+                <div><b id="vr-viewer-title">거실 · 샘플 360 시각화</b><span id="vr-scene-status">Prototype 장면</span></div>
+                <span class="vr-control-hint">마우스·터치 드래그 · 휠/± 확대 · 전체화면</span>
+              </div>
+              <div id="vr-panorama" class="vr-panorama" role="application" aria-label="360도 리모델링 공간 뷰어"></div>
+              <div class="vr-room-nav" aria-label="VR 공간 선택">
+                <button class="vr-room-button active" data-vr-scene="livingroom">거실</button>
+                <button class="vr-room-button" data-vr-scene="kitchen">주방</button>
+                <button class="vr-room-button" data-vr-scene="bedroom">안방</button>
+                <button class="vr-room-button" data-vr-scene="bathroom">욕실</button>
+              </div>
+              <p class="vr-sample-note"><b>샘플 예시 시각화</b> · 이 화면은 판교원마을9단지 특정 세대의 실제 평면·치수·구조를 재현한 디지털 트윈이 아닙니다. 향후 권리와 정확성이 확인된 평면 기반 360 렌더로 교체합니다.</p>
+            </article>
+
+            <aside class="vr-side-panel" aria-label="VR 선택 조건">
+              <h3>집안 선택 조건</h3>
+              <p class="vr-side-intro">기존 MVP에서 정한 취향·범위·예산과 VR 안의 자재 선택을 하나의 브리프로 연결합니다.</p>
+              <div class="vr-summary">
+                <div class="vr-summary-row"><small>테스트 주택</small><b>판교원마을9단지 예시 · 실제 평면 미연결</b></div>
+                <div class="vr-summary-row"><small>선택한 스타일</small><b id="vr-style-value">미니멀 우드</b></div>
+                <div class="vr-summary-row"><small>공사 범위</small><b id="vr-rooms-value">거실 / 주방 / 안방 / 욕실</b></div>
+                <div class="vr-summary-row"><small>MVP 입력 예산</small><b id="vr-base-budget">50,000,000원</b></div>
+              </div>
+
+              <div class="vr-materials" aria-label="샘플 자재 선택">
+                <div class="vr-material-group" data-group="floor">
+                  <b>바닥</b>
+                  <div class="vr-material-options">
+                    <button class="vr-material-option active" data-vr-material="floor" data-value="engineered" data-adjustment="0">강마루<span>기준 옵션</span></button>
+                    <button class="vr-material-option" data-vr-material="floor" data-value="solidwood" data-adjustment="2300000">원목마루<span>샘플 +2,300,000원</span></button>
+                  </div>
+                </div>
+                <div class="vr-material-group" data-group="wall">
+                  <b>벽</b>
+                  <div class="vr-material-options">
+                    <button class="vr-material-option active" data-vr-material="wall" data-value="white" data-adjustment="0">화이트<span>기준 옵션</span></button>
+                    <button class="vr-material-option" data-vr-material="wall" data-value="warmgray" data-adjustment="450000">웜그레이<span>샘플 +450,000원</span></button>
+                    <button class="vr-material-option" data-vr-material="wall" data-value="beige" data-adjustment="650000">베이지<span>샘플 +650,000원</span></button>
+                  </div>
+                </div>
+                <div class="vr-material-group" data-group="kitchen">
+                  <b>주방</b>
+                  <div class="vr-material-options">
+                    <button class="vr-material-option active" data-vr-material="kitchen" data-value="basic" data-adjustment="0">기본형<span>기준 옵션</span></button>
+                    <button class="vr-material-option" data-vr-material="kitchen" data-value="replace" data-adjustment="8500000">전체교체<span>샘플 +8,500,000원</span></button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="vr-estimate">
+                <small>Prototype 예상범위 · 샘플 데이터</small>
+                <strong id="vr-estimate-value">47,500,000~52,500,000원</strong>
+                <span id="vr-adjustment-value">입력 예산 + 샘플 옵션 변동 0원 기준, ±5% 범위로 표시합니다.</span>
+              </div>
+              <button id="vr-quote-button" class="vr-quote-button">이 조건으로 견적 비교하기</button>
+              <p class="vr-data-note">실제 견적은 현장 확인 후 달라질 수 있습니다. 선택값은 브라우저에 저장되며 실제 3D 재질을 즉시 교체하는 기능은 이번 검증 범위에 포함되지 않습니다.</p>
+            </aside>
+          </div>
+        </div>
+      </section>
+
+      <section id="trust" class="trust-wrap" aria-labelledby="trust-heading">
+        <div class="section-heading">
+          <h2 id="trust-heading">무엇을, 얼마에, 어떻게 공사할지<br>먼저 정합니다.</h2>
+          <p>좋은 고객과 좋은 시공사가 명확한 기준 아래 안심하고 거래하도록, 같은 공사조건과 변경 기록을 공유하는 것이 집안의 핵심입니다.</p>
+        </div>
+        <div class="trust-grid">
+          <article class="trust-card">
+            <div class="trust-number"><span>01 · DECIDE</span><span class="trust-icon">◫</span></div>
+            <h3>리모델링 브리프</h3>
+            <p>취향·주택조건·예산·가능범위를 실제 견적에 활용할 공통 조건으로 정리합니다.</p>
+            <div class="passport-preview">
+              <div class="passport-head"><b>집안 브리프</b><span>v0.1 · 컨셉 단계</span></div>
+              <div class="passport-lines"><b id="brief-style">미니멀 우드</b><b id="brief-budget">50,000,000원</b><b id="brief-space">집 전체</b><b>현장 실측 전</b></div>
+            </div>
+            <button class="link-button passport-link">브리프 전체 보기 →</button>
+          </article>
+          <article class="trust-card">
+            <div class="trust-number"><span>02 · VERIFY</span><span class="trust-icon">✓</span></div>
+            <h3>생활언어를 공사조건으로</h3>
+            <p>사진과 “청소하기 편하게” 같은 요구를 색상·마감·공간·우선순위로 정리합니다.</p>
+            <ul class="mini-list">
+              <li>취향 분석 데모: 분위기·색상·마감 선호 정리</li>
+              <li>예산 시나리오: 가능·조정·보류 항목 구분</li>
+              <li>현장 검토: 치수·구조·설비 조건은 전문가 확인</li>
+            </ul>
+          </article>
+          <article class="trust-card">
+            <div class="trust-number"><span>03 · DELIVER</span><span class="trust-icon">⌁</span></div>
+            <h3>고객과 시공사를 함께 보호</h3>
+            <p>정리된 고객 요구와 동일한 브리프로 반복 상담을 줄이고, 범위 밖 변경은 기록으로 남깁니다.</p>
+            <div class="milestone">
+              <div class="milestone-row"><span class="mile-dot">1</span><div class="mile-copy"><b>변경 요청</b><span>추가 공정의 이유와 사진을 첨부</span></div></div>
+              <div class="milestone-row"><span class="mile-dot">2</span><div class="mile-copy"><b>쌍방 승인</b><span>금액·일정·책임 영향 확인</span></div></div>
+              <div class="milestone-row"><span class="mile-dot">3</span><div class="mile-copy"><b>공정·A/S 기록</b><span>사진, 체크리스트, 완료 이력 보관</span></div></div>
+            </div>
+            <span class="future-tag">변경공사·추가비용·승인·공정·하자/A/S 기록은 향후 기능</span>
+            <div class="payment-note">단계별 대금지급과 보증수단은 관련 법률·사업구조 검토 및 금융·보험·보증 전문기관 제휴를 전제로 검토하는 향후 기능입니다. 집안이 현재 공사비를 직접 보관하거나 보증하지 않습니다.</div>
+            <div class="match-box">
+              <b>같은 조건으로, 최대 3개 견적 비교</b>
+              <p>실제 서비스에서는 검증 절차를 거친 적합 시공사에게 동일한 공사 브리프를 전달해 견적을 비교합니다. 현재는 시공사 연결 예정 단계입니다.</p>
+              <div class="transaction-flow"><span>고객</span><i>→</i><span>공사 브리프</span><i>→</i><span>동일조건 견적 비교</span><i>→</i><span>실제 공사계약</span></div>
+              <p style="margin-top:7px;">초기 사업모델: 실제 공사계약 성사에 따른 성과연동형 거래수익 · 계약 기능은 아직 구현되지 않았습니다.</p>
+              <button id="match-button" class="match-button">이 조건으로 시공사 견적 비교하기</button>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section id="guardrail" class="guardrail" aria-labelledby="guardrail-title">
+        <div class="guardrail-inner">
+          <div>
+            <p class="guardrail-kicker">OPERATING GUARDRAILS</p>
+            <h2 id="guardrail-title">신뢰는 약속이 아니라<br>보이는 절차에서 시작됩니다.</h2>
+          </div>
+          <div class="guardrail-list">
+            <div class="guardrail-item"><b>도면 권리부터</b><span>무단 수집이 아닌, 사용·보관·파생 활용이 허가된 도면 라이브러리만 연결합니다.</span></div>
+            <div class="guardrail-item"><b>개인정보는 동의 후</b><span>견적을 보내기 전까지 연락처를 공유하지 않고, 고객이 동의한 범위에서만 매칭합니다.</span></div>
+            <div class="guardrail-item"><b>양쪽의 변경을 보호</b><span>소비자와 시공사 모두에게 범위 밖 요청·추가 비용·일정 변화를 투명하게 남깁니다.</span></div>
+            <div class="guardrail-item"><b>광고와 신뢰지표 분리</b><span>향후 광고·프로모션 노출은 거래이력 기반 신뢰지표와 별도로 운영합니다.</span></div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        <span><b>집안</b> · 내 집·취향·예산에 맞는 공사조건 설계 및 견적 비교 플랫폼</span>
+        <span>본 화면의 단지·도면·시안은 제품 흐름 검증을 위한 데모입니다.</span>
+      </div>
+    </footer>
+  </div>
+
+  <div id="passport-modal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="passport-title">
+    <div class="modal">
+      <div class="modal-head">
+        <div><p class="eyebrow" style="color:#658c78;margin-bottom:7px;"><span class="dot" style="background:#c77a55;box-shadow:none;"></span> 집안 브리프</p><h2 id="passport-title">선택 내용을<br>하나의 약속으로</h2></div>
+        <button class="modal-close" data-close-modal aria-label="닫기">×</button>
+      </div>
+      <p class="modal-intro">이 리모델링 브리프는 가상 시안을 시공 지시로 바꾸는 문서가 아닙니다. 고객과 시공사가 같은 예산·범위·우선순위를 보고 현장 검토를 시작하기 위한 공통 기준입니다.</p>
+      <div class="passport-large">
+        <div class="passport-large-top"><b>집안 · 컨셉 브리프</b><span>v0.1</span></div>
+        <div class="passport-grid">
+          <div class="passport-cell"><small>단지 · 평형</small><b id="modal-home">판교원마을 9단지 · 96.86㎡</b></div>
+          <div class="passport-cell"><small>공사 범위 · 현재 시안</small><b id="modal-space">집 전체 · 거실 · 주방</b></div>
+          <div class="passport-cell"><small>취향</small><b id="modal-style">미니멀 우드</b></div>
+          <div class="passport-cell"><small>고객 예산</small><b id="modal-budget">50,000,000원</b></div>
+          <div class="passport-cell"><small>꼭 하고 싶은 공사</small><b id="modal-must">아직 선택하지 않음</b></div>
+          <div class="passport-cell"><small>예산이 되면 바꿀 항목</small><b id="modal-nice">아직 선택하지 않음</b></div>
+          <div class="passport-cell"><small>유지할 요소</small><b id="modal-keep">아직 선택하지 않음</b></div>
+          <div class="passport-cell"><small>예산 분석</small><b id="modal-analysis">선택 범위 조정 검토</b></div>
+          <div class="passport-cell"><small>가능한 공사범위</small><b id="modal-possible">바닥·벽·조명과 기본 마감</b></div>
+          <div class="passport-cell"><small>예산 때문에 조정</small><b id="modal-adjusted">자재 등급과 교체 범위</b></div>
+          <div class="passport-cell"><small>보류 항목</small><b id="modal-deferred">비필수 고급 옵션</b></div>
+          <div class="passport-cell"><small>현장 확인</small><b id="modal-site">구조 · 설비 · 실측</b></div>
+          <div class="passport-cell"><small>VR 선택 자재 · 샘플</small><b id="modal-vr-materials">강마루 / 화이트 / 주방 기본형</b></div>
+          <div class="passport-cell"><small>VR 장면 · Prototype 예상범위</small><b id="modal-vr-summary">거실 · 47,500,000~52,500,000원</b></div>
+          <div class="passport-cell"><small>현재 상태</small><b>프로토타입 컨셉 · 실측 전</b></div>
+          <div class="passport-cell"><small>포함되지 않는 것</small><b>확정 견적 · 구조 안전 판단</b></div>
+        </div>
+      </div>
+      <p class="brief-standard">이 공사 브리프를 여러 시공사에 동일하게 전달해 같은 조건에서 견적을 비교합니다.</p>
+      <p class="modal-disclaimer">가상 리모델링 → 공사 브리프 → 현장 확인 → 최대 3개 적합 시공사 견적 비교 순서로 진행됩니다. 실제 견적은 구조·설비·자재 수급·관리규정과 현장 실측을 반영해 별도로 확정해야 합니다.</p>
+      <button id="modal-match-cta" class="primary-button" style="width:100%;margin-top:11px;">이 조건으로 시공사 견적 비교하기</button>
+    </div>
+  </div>
+
+  <div id="toast" class="toast" role="status"><i>✓</i><span></span></div>
+
+  <script src="vendor/pannellum/pannellum.js"></script>
+  <script>
+    const complexes = [
+      { name: "판교원마을 9단지 한림풀에버", address: "경기도 성남시 분당구 서판교로 29" },
+      { name: "판교 푸르지오 그랑블", address: "경기도 성남시 분당구 판교대장로 69" },
+      { name: "위례 자연앤래미안 e편한세상", address: "경기도 성남시 수정구 위례광장로 36" },
+      { name: "광교 자연앤힐스테이트", address: "경기도 수원시 영통구 광교호수로 15" }
+    ];
+    const styleData = {
+      wood: { name: "미니멀 우드", english: "Minimal wood", copy: "밝은 우드 결, 따뜻한 벽면과 절제된 선으로 정돈한 공간" },
+      soho: { name: "소프트 모던", english: "Soft modern", copy: "낮은 대비의 그레이·토프와 차분한 소재감으로 정리한 공간" },
+      beige: { name: "내추럴 베이지", english: "Natural beige", copy: "빛을 머금는 베이지, 밝은 우드와 부드러운 질감으로 완성한 공간" },
+      deep: { name: "딥 모던", english: "Deep modern", copy: "스모크 우드와 짙은 소재 대비로 밀도 있게 완성한 공간" }
+    };
+    const budgetData = {
+      refresh: {
+        label: "핵심 개선 시나리오",
+        renderLabel: "핵심 개선",
+        scope: "핵심 공간 마감 중심의 리프레시",
+        changed: "기존 구조를 유지하고 선택 공간의 도배·바닥·조명·필름 중심으로 개선",
+        retained: "전체 교체·맞춤가구·고급 옵션은 우선 제외. 방수·누수·필수 설비는 현장 검토 후 우선 반영",
+        basis: "입력 예산에 맞춘 프로토타입 범위 · 실제 공사 가능 범위는 현장 확인 후 확정"
+      },
+      standard: {
+        label: "균형 조정 시나리오",
+        renderLabel: "균형 조정",
+        scope: "전 공간의 비구조적 표준 리모델링",
+        changed: "전 공간 바닥·벽·조명, 주방 도어·상판, 욕실 기본 교체",
+        retained: "내력벽·창호 전체·배관 대이동은 현장 검토 전 제외",
+        basis: "입력 예산에 맞춘 프로토타입 범위 · 실제 공사 가능 범위는 현장 확인 후 확정"
+      },
+      premium: {
+        label: "디테일 강화 시나리오",
+        renderLabel: "디테일 강화",
+        scope: "맞춤 마감·수납을 포함한 전 공간 프리미엄 리모델링",
+        changed: "고급 바닥·마감, 맞춤 수납, 주방·욕실 디테일, 간접조명",
+        retained: "내력벽·확장·배관 대이동은 실측·관리규정 확인 뒤 별도 검토",
+        basis: "입력 예산에 맞춘 프로토타입 범위 · 실제 공사 가능 범위는 현장 확인 후 확정"
+      }
+    };
+    const budgetScenarioLabels = {
+      refresh: "핵심 개선",
+      standard: "균형 조정",
+      premium: "디테일 강화"
+    };
+    const tasteProfiles = {
+      wood: { mood: "따뜻하고 정돈된 공간", color: "웜화이트 · 베이지 · 라이트우드", floor: "밝은 오크 계열", wall: "저채도 · 무광", kitchen: "심플한 평판형 도어", light: "간접조명 · 개방감과 수납" },
+      beige: { mood: "부드럽고 편안한 공간", color: "아이보리 · 샌드 베이지 · 내추럴 우드", floor: "내추럴 오크 계열", wall: "밝은 저채도 · 질감", kitchen: "밝은 무광 도어", light: "확산 조명 · 여백과 채광" },
+      soho: { mood: "차분하고 기능적인 공간", color: "웜그레이 · 토프 · 소프트 화이트", floor: "중명도 우드 계열", wall: "낮은 대비 · 무광", kitchen: "손잡이 없는 평판형 도어", light: "직선 조명 · 정돈된 동선" },
+      deep: { mood: "밀도 있고 고급스러운 공간", color: "차콜 · 스모크 우드 · 뉴트럴 그레이", floor: "딥 오크 계열", wall: "짙은 저채도 · 소재 대비", kitchen: "다크톤 평판형 도어", light: "포인트 조명 · 맞춤 수납" }
+    };
+    const scopeData = {
+      whole: {
+        name: "집 전체",
+        rooms: ["거실 · 주방", "안방", "작은방", "욕실"],
+        defaultRoom: "거실 · 주방",
+        guide: "이번 예산과 시안은 집 전체 기준입니다. 선택하지 않은 공간은 범위에서 제외됩니다.",
+        budgetLabel: "예상 공사 예산 · 집 전체",
+        sceneLabel: "공간별 실사 시안",
+        sceneSummary: "거실 · 안방 · 작은방 · 욕실",
+        prices: { refresh: "3,000~5,000만 원", standard: "5,000~8,000만 원", premium: "8,000만~1억 원" },
+        changes: {
+          refresh: "거실·주방 중심 바닥·벽·조명, 필름·도장 등 핵심 마감 개선",
+          standard: "전 공간 바닥·벽·조명, 주방 도어·상판, 욕실 기본 교체",
+          premium: "고급 바닥·마감, 맞춤 수납, 주방·욕실 디테일, 간접조명"
+        },
+        retained: "내력벽·창호 전체·배관 대이동은 현장 실측과 관리규정 확인 전 제외",
+        basis: "전용 85㎡ 전후 · 전체 범위 기준 · 현장 상태에 따라 달라질 수 있음"
+      },
+      living: {
+        name: "거실 · 주방",
+        rooms: ["거실 · 주방"],
+        defaultRoom: "거실 · 주방",
+        guide: "거실·주방만 이번 공사와 예산에 포함합니다. 침실·욕실은 시안과 견적 범위에서 제외됩니다.",
+        budgetLabel: "예상 공사 예산 · 거실·주방",
+        sceneLabel: "선택 공정 실사 시안",
+        sceneSummary: "거실 · 주방",
+        prices: { refresh: "1,500~3,000만 원", standard: "3,000~4,500만 원", premium: "4,500~7,000만 원" },
+        changes: {
+          refresh: "거실·주방 바닥·벽·조명, 주방 필름·도장 등 핵심 마감",
+          standard: "거실·주방 바닥·벽·조명, 주방 도어·상판과 기본 수납 개선",
+          premium: "고급 바닥·상판, 맞춤 수납, 간접조명과 주방 디테일 강화"
+        },
+        retained: "침실·욕실·창호 전체·벽체 이동·배관 대이동은 이번 범위에서 제외",
+        basis: "거실·주방 기준 · 기존 주방 배치 유지 가정 · 현장 상태에 따라 달라질 수 있음"
+      },
+      bathroom1: {
+        name: "욕실 1개",
+        rooms: ["욕실"],
+        defaultRoom: "욕실",
+        guide: "욕실 한 곳만 이번 공사와 예산에 포함합니다. 다른 욕실과 나머지 공간은 범위에서 제외됩니다.",
+        budgetLabel: "예상 공사 예산 · 욕실 1개",
+        sceneLabel: "선택 공정 실사 시안",
+        sceneSummary: "욕실 1개",
+        prices: { refresh: "600~1,000만 원", standard: "1,000~1,600만 원", premium: "1,600~2,500만 원" },
+        changes: {
+          refresh: "기본 타일 보수·교체, 수전·도기, 조명과 수납장 중심 개선",
+          standard: "타일·도기·수전·수납장·샤워부스의 표준 교체",
+          premium: "고급 타일·맞춤 수납·매립 조명·프리미엄 수전 디테일"
+        },
+        retained: "다른 욕실·거실·침실·배관 대이동·방수 상태 보수 범위는 현장 확인 전 제외",
+        basis: "욕실 1개 기준 · 방수층·배관 상태에 따라 달라질 수 있음"
+      },
+      bathroom2: {
+        name: "욕실 2개",
+        rooms: ["욕실", "욕실 2"],
+        defaultRoom: "욕실",
+        guide: "공용 욕실과 안방 욕실을 각각 확인합니다. 두 시안은 같은 스타일·예산 조건 안에서 서로 다른 공간으로 제시됩니다.",
+        budgetLabel: "예상 공사 예산 · 욕실 2개",
+        sceneLabel: "욕실 1 · 욕실 2 실사 시안",
+        sceneSummary: "공용 욕실 · 안방 욕실",
+        prices: { refresh: "1,200~1,900만 원", standard: "1,900~3,100만 원", premium: "3,100~4,800만 원" },
+        changes: {
+          refresh: "두 욕실의 기본 타일 보수·교체, 수전·도기·조명 중심 개선",
+          standard: "두 욕실의 타일·도기·수전·수납장·샤워부스 표준 교체",
+          premium: "두 욕실의 고급 타일·맞춤 수납·매립 조명·프리미엄 수전 디테일"
+        },
+        retained: "거실·침실·벽체 이동·배관 대이동·방수 상태 보수 범위는 현장 확인 전 제외",
+        basis: "욕실 2개 · 동일 사양 가정 · 방수층·배관 상태에 따라 달라질 수 있음"
+      },
+      room: {
+        name: "방 1개",
+        rooms: ["안방", "작은방"],
+        defaultRoom: "안방",
+        guide: "안방 또는 작은방 한 곳만 이번 공사와 예산에 포함합니다. 다른 공간은 시안과 견적 범위에서 제외됩니다.",
+        budgetLabel: "예상 공사 예산 · 방 1개",
+        sceneLabel: "선택 공정 실사 시안",
+        sceneSummary: "안방 또는 작은방",
+        prices: { refresh: "800~1,500만 원", standard: "1,500~2,500만 원", premium: "2,500~4,000만 원" },
+        changes: {
+          refresh: "바닥·벽·조명, 필름·도장과 기본 수납 정리 중심 개선",
+          standard: "바닥·벽·조명, 붙박이장 도어·수납과 비구조적 마감 개선",
+          premium: "고급 바닥·벽 마감, 맞춤 수납, 간접조명과 디테일 강화"
+        },
+        retained: "다른 방·거실·욕실·창호 전체·벽체 이동은 이번 범위에서 제외",
+        basis: "방 1개 기준 · 기존 구조와 창호 유지 가정 · 현장 상태에 따라 달라질 수 있음"
+      }
+    };
+    const roomData = {
+      "거실 · 주방": { short: "거실 · 주방", assetKey: "living", copy: "가족의 움직임과 주방 동선을 함께 살펴보는 거실·주방 시안" },
+      "안방": { short: "안방", assetKey: "master", copy: "빛의 방향과 수납 벽의 비례를 살펴보는 안방 시안" },
+      "작은방": { short: "작은방", assetKey: "small", copy: "침실과 작업 공간 사이의 여백을 살펴보는 작은방 시안" },
+      "욕실": { short: "욕실 1", assetKey: "bath", copy: "타일·수납·샤워 동선의 균형을 살펴보는 공용 욕실 시안" },
+      "욕실 2": { short: "욕실 2", assetKey: "bath2", copy: "안방에 인접한 욕실의 마감과 샤워 동선을 살펴보는 별도 시안" }
+    };
+    const unitData = {
+      "84㎡A": {
+        assetKey: "84",
+        image: "assets/aether-isometric-84a.png",
+        subtitle: "34평형 · 3Bay",
+        layout: "3룸 · 2욕실 · 컴팩트 3Bay"
+      },
+      "96.86㎡": {
+        assetKey: "39",
+        image: "assets/aether-isometric-floorplan.png",
+        subtitle: "39평형 · 4Bay",
+        layout: "4룸 · 2욕실 · 4Bay"
+      },
+      "109.11㎡": {
+        assetKey: "109",
+        image: "assets/aether-isometric-109.png",
+        subtitle: "43평형 · 4Bay",
+        layout: "4룸 · 드레스룸 · 와이드 4Bay"
+      }
+    };
+    const vrPrototypeData = {
+      apartment: "판교원마을9단지 예시",
+      dataStatus: "Prototype · 실제 평면·치수·구조 미연결",
+      scenes: {
+        livingroom: { label: "거실", panorama: "assets/vr/pangyo9/livingroom.png", cubeMap: ["front", "right", "back", "left", "up", "down"].map(function (face) { return "assets/vr/pangyo9/livingroom/" + face + ".jpg"; }), links: [{ target: "kitchen", label: "주방으로", pitch: -3, yaw: 42 }, { target: "bedroom", label: "안방으로", pitch: -4, yaw: -72 }] },
+        kitchen: { label: "주방", panorama: "assets/vr/pangyo9/kitchen.png", cubeMap: ["front", "right", "back", "left", "up", "down"].map(function (face) { return "assets/vr/pangyo9/kitchen/" + face + ".jpg"; }), links: [{ target: "livingroom", label: "거실로", pitch: -3, yaw: -58 }, { target: "bathroom", label: "욕실로", pitch: -4, yaw: 78 }] },
+        bedroom: { label: "안방", panorama: "assets/vr/pangyo9/bedroom.png", cubeMap: ["front", "right", "back", "left", "up", "down"].map(function (face) { return "assets/vr/pangyo9/bedroom/" + face + ".jpg"; }), links: [{ target: "livingroom", label: "거실로", pitch: -4, yaw: 65 }, { target: "bathroom", label: "욕실로", pitch: -5, yaw: -62 }] },
+        bathroom: { label: "욕실", panorama: "assets/vr/pangyo9/bathroom.png", cubeMap: ["front", "right", "back", "left", "up", "down"].map(function (face) { return "assets/vr/pangyo9/bathroom/" + face + ".jpg"; }), links: [{ target: "bedroom", label: "안방으로", pitch: -3, yaw: -76 }, { target: "kitchen", label: "주방으로", pitch: -4, yaw: 68 }] }
+      },
+      materials: {
+        floor: { engineered: { label: "강마루", adjustment: 0 }, solidwood: { label: "원목마루", adjustment: 2300000 } },
+        wall: { white: { label: "화이트", adjustment: 0 }, warmgray: { label: "웜그레이", adjustment: 450000 }, beige: { label: "베이지", adjustment: 650000 } },
+        kitchen: { basic: { label: "주방 기본형", adjustment: 0 }, replace: { label: "주방 전체교체", adjustment: 8500000 } }
+      }
+    };
+    const state = {
+      complex: complexes[0],
+      unit: "96.86㎡",
+      scope: "whole",
+      style: "wood",
+      budget: "standard",
+      room: "거실 · 주방",
+      workType: "whole",
+      selectedRooms: [],
+      needs: [],
+      tasteMethod: "gallery",
+      tasteRefs: ["warm-living"],
+      tasteReasons: ["전체 분위기"],
+      uploadedFiles: [],
+      tasteConfirmed: false,
+      budgetAmount: 50000000,
+      priority: "총 예산",
+      mustItems: [],
+      niceItems: [],
+      keepItems: [],
+      siteFlags: [],
+      vrScene: "livingroom",
+      selectedMaterials: { floor: "engineered", wall: "white", kitchen: "basic" },
+      vrEstimatedBudget: null
+    };
+    const searchInput = document.getElementById("complex-search");
+    const searchList = document.getElementById("complex-list");
+    const toast = document.getElementById("toast");
+    let toastTimer;
+
+    function showToast(message) {
+      toast.querySelector("span").textContent = message;
+      toast.classList.add("show");
+      window.clearTimeout(toastTimer);
+      toastTimer = window.setTimeout(function () { toast.classList.remove("show"); }, 2800);
+    }
+
+    function formatWon(amount) {
+      return Math.round(amount).toLocaleString("ko-KR") + "원";
+    }
+
+    function getRequestedScopeName() {
+      if (state.workType === "whole") return "전체 리모델링";
+      if (state.scope === "bathroom2") return "부분 리모델링 · 욕실 2개";
+      return state.selectedRooms.length ? "부분 리모델링 · " + state.selectedRooms.join(" / ") : "부분 리모델링 · 공간 선택 필요";
+    }
+
+    function getActivePreviewRooms() {
+      if (state.workType === "whole") return ["거실 · 주방", "안방", "작은방", "욕실", "욕실 2"];
+      if (state.scope === "bathroom2") return ["욕실", "욕실 2"];
+      const rooms = [];
+      const publicItems = ["거실", "주방", "현관", "발코니", "바닥", "벽·도배", "조명", "수납"];
+      if (state.selectedRooms.some(function (item) { return publicItems.includes(item); })) rooms.push("거실 · 주방");
+      if (state.selectedRooms.includes("안방")) rooms.push("안방");
+      if (state.selectedRooms.includes("작은방")) rooms.push("작은방");
+      if (state.selectedRooms.includes("욕실")) rooms.push("욕실");
+      return rooms.length ? rooms : ["거실 · 주방"];
+    }
+
+    function getBudgetTier(amount) {
+      const refreshLimit = state.workType === "whole" ? 30000000 : 15000000;
+      const standardLimit = state.workType === "whole" ? 80000000 : 45000000;
+      if (amount <= refreshLimit) return "refresh";
+      if (amount <= standardLimit) return "standard";
+      return "premium";
+    }
+
+    function getBudgetAnalysis() {
+      const itemCount = state.workType === "whole" ? 7 : Math.max(state.selectedRooms.length, 1);
+      const pressureLine = state.workType === "whole" ? 50000000 : itemCount * 7000000;
+      const adjustment = state.budgetAmount < pressureLine || (state.mustItems.length >= 3 && state.budgetAmount < 70000000);
+      return {
+        adjustment: adjustment,
+        status: adjustment ? "일부 범위 조정 권장" : "선택 조건 반영 후보",
+        copy: adjustment
+          ? getRequestedScopeName() + " 요청을 모두 반영하면 입력 예산을 넘을 가능성이 있어, 필수 공사를 지키면서 범위와 자재 등급을 조정한 시안을 보여드립니다."
+          : formatWon(state.budgetAmount) + " 안에서 " + getRequestedScopeName() + "의 우선순위를 유지하는 프로토타입 시나리오입니다. 현장 확인 전 확정값은 아닙니다."
+      };
+    }
+
+    function getScopeBreakdown() {
+      const analysis = getBudgetAnalysis();
+      let possible;
+      if (state.workType === "partial") {
+        possible = state.selectedRooms.length
+          ? state.selectedRooms.map(function (item) { return item + " 중심 개선"; })
+          : ["바꿀 공간 선택 필요"];
+      } else if (state.budget === "refresh") {
+        possible = ["도배·벽 마감", "기본 조명", "바닥 또는 선택 공간 부분교체"];
+      } else if (state.budget === "standard") {
+        possible = ["바닥·벽·조명", "주방 도어·상판", "욕실 기본 교체"];
+      } else {
+        possible = ["전 공간 기본 마감", "주방·욕실 디테일", "맞춤 수납", "간접조명"];
+      }
+      state.mustItems.forEach(function (item) {
+        if (!possible.some(function (value) { return value.includes(item); })) possible.unshift("우선 유지 · " + item);
+      });
+      if (state.keepItems.length && !state.keepItems.includes("없음")) {
+        possible = possible.filter(function (value) {
+          return !state.keepItems.some(function (keep) { return value.includes(keep); });
+        });
+      }
+
+      let adjusted = analysis.adjustment
+        ? ["비필수 프리미엄 옵션 제외", "자재 등급 조정", "전체교체 → 부분교체"]
+        : ["현장 상태에 따라 자재 등급·세부 범위 조정 가능"];
+      let deferred = analysis.adjustment
+        ? ["맞춤가구·고급 마감", "비핵심 공간 공사"]
+        : ["현재 선택하지 않은 비필수 공사"];
+      if (state.niceItems.length) {
+        if (state.budget === "premium" && !analysis.adjustment) {
+          state.niceItems.forEach(function (item) { possible.push("예산 내 후보 · " + item); });
+        } else {
+          state.niceItems.forEach(function (item) { deferred.push("예산 확인 후 · " + item); });
+        }
+      }
+      if (state.workType === "partial") deferred.unshift("선택하지 않은 공간");
+      const review = state.siteFlags.length
+        ? state.siteFlags.concat(["실측"])
+        : ["구조·내력벽", "배관·누수·결로", "전기용량·창호", "실측"];
+      return {
+        possible: Array.from(new Set(possible)).join(" · "),
+        adjusted: Array.from(new Set(adjusted)).join(" · "),
+        deferred: Array.from(new Set(deferred)).join(" · "),
+        review: Array.from(new Set(review)).join(" · ")
+      };
+    }
+
+    function getCurrentBudget() {
+      const base = budgetData[state.budget];
+      const scope = scopeData[state.scope];
+      const analysis = getBudgetAnalysis();
+      let changed = scope.changes[state.budget];
+      let retained = scope.retained;
+      if (analysis.adjustment) {
+        changed = state.priority === "원하는 디자인"
+          ? "선택한 분위기의 핵심 색·바닥·조명을 우선 반영하고, 전체 교체 대신 부분교체로 조정"
+          : state.priority === "자재 품질"
+            ? "선택 공간의 자재 품질을 우선 유지하고, 비필수 공간과 맞춤 옵션을 축소"
+            : state.priority === "공사 범위"
+              ? "공사 범위는 유지하되 기존 구조 활용, 필름·도배·부분교체 비중을 높여 조정"
+              : "기존 구조를 유지하고 도배·바닥·조명·필름 등 체감 효과가 큰 항목부터 반영";
+        retained = "맞춤가구·고급 옵션·전체교체는 우선 제외 또는 축소";
+      }
+      if (state.workType === "partial") {
+        const selected = state.selectedRooms.length ? state.selectedRooms.join(" / ") : "선택 공간";
+        changed = selected + " 안에서 " + changed;
+        retained = "선택하지 않은 공간은 결과와 견적 범위에서 제외. " + retained;
+      }
+      if (state.keepItems.length && !state.keepItems.includes("없음")) retained += ". 유지: " + state.keepItems.join(" / ");
+      return {
+        ...base,
+        label: formatWon(state.budgetAmount),
+        scope: getRequestedScopeName() + " · " + base.scope,
+        changed: changed,
+        retained: retained,
+        basis: base.basis,
+        analysis: analysis
+      };
+    }
+
+    function getSceneSource(unit, styleId, budgetId, roomName) {
+      if (roomData[roomName].assetKey === "bath2") {
+        return "assets/scenes/render-bath2-" + styleId + "-" + budgetId + ".png";
+      }
+      return "assets/scenes/render-" + unit.assetKey + "-" + styleId + "-" + budgetId + "-" + roomData[roomName].assetKey + ".png";
+    }
+
+    function syncScopeUI() {
+      const scope = scopeData[state.scope];
+      const activeRooms = getActivePreviewRooms();
+      document.getElementById("scope-guide").textContent = state.workType === "whole" ? scopeData.whole.guide : "설문에서 선택한 부분공사 항목을 기준으로, 준비된 공간 시안만 보여드립니다.";
+      document.getElementById("budget-label").textContent = "예산에 맞춘 시안 단계 · " + formatWon(state.budgetAmount);
+      document.getElementById("scene-label").textContent = state.workType === "whole" ? "공간별 실사 시안" : "선택 범위 실사 시안";
+      document.getElementById("scene-summary").textContent = activeRooms.map(function (room) { return roomData[room].short; }).join(" · ");
+      document.querySelectorAll(".budget-option").forEach(function (button) {
+        const label = budgetScenarioLabels[button.dataset.budget];
+        button.innerHTML = label.replace(" ", "<br>");
+        button.setAttribute("aria-label", label + " 시나리오");
+        button.classList.toggle("active", button.dataset.budget === state.budget);
+      });
+      document.querySelectorAll(".room-chip, .scene-thumb, .iso-hotspot").forEach(function (item) {
+        item.hidden = !activeRooms.includes(item.dataset.room);
+      });
+      if (!activeRooms.includes(state.room)) state.room = activeRooms[0];
+      const unit = unitData[state.unit];
+      document.querySelectorAll(".scene-thumb").forEach(function (button) {
+        const thumbnail = button.querySelector(".scene-thumb-image");
+        thumbnail.style.backgroundImage = 'url("' + getSceneSource(unit, state.style, state.budget, button.dataset.room) + '")';
+      });
+    }
+
+    function getVrSelectedRooms() {
+      const activeRooms = getActivePreviewRooms();
+      const selected = [];
+      if (activeRooms.includes("거실 · 주방")) selected.push("거실", "주방");
+      if (activeRooms.includes("안방")) selected.push("안방");
+      if (activeRooms.includes("욕실") || activeRooms.includes("욕실 2")) selected.push("욕실");
+      return selected.length ? Array.from(new Set(selected)) : ["거실 · 샘플"];
+    }
+
+    function getVrEstimate() {
+      const adjustment = Object.keys(state.selectedMaterials).reduce(function (sum, group) {
+        const selected = state.selectedMaterials[group];
+        return sum + (vrPrototypeData.materials[group][selected] || { adjustment: 0 }).adjustment;
+      }, 0);
+      const center = state.budgetAmount + adjustment;
+      return {
+        base: state.budgetAmount,
+        adjustment: adjustment,
+        lower: Math.round(center * .95 / 100000) * 100000,
+        upper: Math.round(center * 1.05 / 100000) * 100000
+      };
+    }
+
+    function getVrMaterialLabels() {
+      return Object.keys(state.selectedMaterials).map(function (group) {
+        return vrPrototypeData.materials[group][state.selectedMaterials[group]].label;
+      });
+    }
+
+    function getVrPayload() {
+      const estimate = getVrEstimate();
+      state.vrEstimatedBudget = estimate;
+      return {
+        apartment: vrPrototypeData.apartment,
+        unitType: state.unit,
+        selectedStyle: styleData[state.style].name,
+        selectedRooms: getVrSelectedRooms(),
+        selectedMaterials: { ...state.selectedMaterials },
+        estimatedBudget: {
+          type: "Prototype 예상범위 · 샘플 데이터",
+          base: estimate.base,
+          sampleAdjustment: estimate.adjustment,
+          lower: estimate.lower,
+          upper: estimate.upper
+        },
+        vrScene: state.vrScene,
+        dataStatus: vrPrototypeData.dataStatus
+      };
+    }
+
+    function updateBrief() {
+      const style = styleData[state.style];
+      const room = roomData[state.room];
+      const unit = unitData[state.unit];
+      const scope = scopeData[state.scope];
+      const budget = getCurrentBudget();
+      const analysis = budget.analysis;
+      const breakdown = getScopeBreakdown();
+      const renderSource = getSceneSource(unit, state.style, state.budget, state.room);
+      const bathroomPair = document.getElementById("bathroom-preview-pair");
+      const showBathroomPair = state.scope === "bathroom2";
+      bathroomPair.hidden = !showBathroomPair;
+      if (showBathroomPair) {
+        document.getElementById("bathroom-one-image").src = getSceneSource(unit, state.style, state.budget, "욕실");
+        document.getElementById("bathroom-two-image").src = getSceneSource(unit, state.style, state.budget, "욕실 2");
+      }
+      document.getElementById("complex-name").textContent = state.complex.name;
+      document.getElementById("address-line").textContent = state.complex.address;
+      document.getElementById("unit-label").textContent = state.unit;
+      document.getElementById("unit-subtitle").textContent = unit.subtitle;
+      document.getElementById("plan-stage").dataset.unit = state.unit;
+      document.getElementById("iso-image").src = unit.image;
+      document.getElementById("iso-image").alt = state.unit + " · " + unit.layout + " 아이소메트릭 도면";
+      document.getElementById("result-title").textContent = style.name + " · " + getRequestedScopeName();
+      document.getElementById("result-copy").textContent = room.short + " — " + style.copy + ". " + budget.renderLabel + " 단계로 범위와 표현을 맞춘 프로토타입 시안입니다.";
+      document.getElementById("render-style").textContent = style.english;
+      document.getElementById("render-meta").textContent = room.short + " · 입력 예산 " + budget.label;
+      document.getElementById("render-label").innerHTML = "<i></i> 가상 리모델링 · " + budget.renderLabel + " · 프로토타입";
+      document.getElementById("scope-title").textContent = getRequestedScopeName() + " · " + budget.renderLabel;
+      document.getElementById("scope-basis").textContent = budget.basis;
+      document.getElementById("scope-changed").textContent = budget.changed;
+      document.getElementById("scope-retained").textContent = budget.retained;
+      document.getElementById("proof-budget").textContent = budget.label + " · 프로토타입 시나리오 · 상세 견적 전";
+      document.getElementById("brief-style").textContent = style.name;
+      document.getElementById("brief-budget").textContent = budget.label;
+      document.getElementById("brief-space").textContent = getRequestedScopeName();
+      document.getElementById("modal-home").textContent = state.complex.name.replace(" 한림풀에버", "") + " · " + state.unit;
+      document.getElementById("modal-space").textContent = getRequestedScopeName() + " · 현재 시안 " + room.short;
+      document.getElementById("modal-style").textContent = style.name;
+      document.getElementById("modal-budget").textContent = budget.label;
+      document.getElementById("modal-must").textContent = state.mustItems.length ? state.mustItems.join(" / ") : "아직 선택하지 않음";
+      document.getElementById("modal-nice").textContent = state.niceItems.length ? state.niceItems.join(" / ") : "아직 선택하지 않음";
+      document.getElementById("modal-keep").textContent = state.keepItems.length ? state.keepItems.join(" / ") : "아직 선택하지 않음";
+      document.getElementById("modal-analysis").textContent = analysis.status + " · " + budget.renderLabel;
+      document.getElementById("modal-possible").textContent = breakdown.possible;
+      document.getElementById("modal-adjusted").textContent = breakdown.adjusted;
+      document.getElementById("modal-deferred").textContent = breakdown.deferred;
+      document.getElementById("modal-site").textContent = breakdown.review + " · 현장 검토 필요";
+      const vrPayload = getVrPayload();
+      document.getElementById("modal-vr-materials").textContent = getVrMaterialLabels().join(" / ") + " · 샘플 데이터";
+      document.getElementById("modal-vr-summary").textContent = vrPrototypeData.scenes[vrPayload.vrScene].label + " · " + formatWon(vrPayload.estimatedBudget.lower) + "~" + formatWon(vrPayload.estimatedBudget.upper);
+      document.getElementById("engine-status").textContent = analysis.status;
+      document.getElementById("engine-copy").textContent = analysis.copy;
+      document.getElementById("possible-work").textContent = breakdown.possible;
+      document.getElementById("adjusted-work").textContent = breakdown.adjusted;
+      document.getElementById("deferred-work").textContent = breakdown.deferred;
+      document.getElementById("review-work").textContent = breakdown.review;
+      document.getElementById("engine-adjustment-copy").textContent = analysis.adjustment
+        ? "예산에 맞는 대안을 적용했습니다. " + (state.mustItems.length ? "고객 MUST 공사(" + state.mustItems.join(" / ") + ")는 가능한 한 우선 유지합니다." : "방수·누수·필수 설비는 가능한 한 우선 유지합니다.")
+        : "현재 입력에서는 선택 범위를 우선 유지합니다. 구조·설비·방수 항목과 실제 자재 등급은 현장 확인 후 다시 조정합니다.";
+      const siteLabels = state.siteFlags.length ? state.siteFlags : ["구조", "설비", "실측"];
+      document.getElementById("site-badges").innerHTML = siteLabels.map(function (item) { return "<span>현장 검토 필요 · " + item + "</span>"; }).join("");
+      document.querySelectorAll(".scene-thumb").forEach(function (button) {
+        const thumbnail = button.querySelector(".scene-thumb-image");
+        thumbnail.style.backgroundImage = 'url("' + getSceneSource(unit, state.style, state.budget, button.dataset.room) + '")';
+      });
+      const renderImage = document.getElementById("render-image");
+      const renderFrame = document.querySelector(".render-frame");
+      renderImage.onload = function () { renderFrame.classList.remove("unavailable"); };
+      renderImage.onerror = function () {
+        renderFrame.classList.add("unavailable");
+        document.getElementById("render-label").innerHTML = "<i></i> 이 조합의 시안은 라이브러리 준비 중";
+      };
+      renderImage.src = renderSource;
+      renderImage.alt = state.unit + " · " + style.name + " · " + budget.renderLabel + " 프로토타입 시나리오로 연출된 " + room.short;
+      document.querySelectorAll(".style-card").forEach(function (button) { button.classList.toggle("active", button.dataset.style === state.style); });
+      document.querySelectorAll(".budget-option").forEach(function (button) { button.classList.toggle("active", button.dataset.budget === state.budget); });
+      document.querySelectorAll("[data-room]").forEach(function (item) { item.classList.toggle("active", item.dataset.room === state.room); });
+    }
+
+    function renderComplexList(query) {
+      const normalized = query.trim().toLowerCase();
+      const matches = complexes.filter(function (item) {
+        return item.name.toLowerCase().includes(normalized) || item.address.toLowerCase().includes(normalized);
+      });
+      searchList.innerHTML = "";
+      if (!matches.length) {
+        searchList.innerHTML = '<div class="search-item"><strong>일치하는 데모 단지가 없어요</strong><span>실서비스에서는 라이선스 도면 라이브러리와 연결됩니다.</span></div>';
+      } else {
+        matches.forEach(function (item) {
+          const option = document.createElement("button");
+          option.type = "button";
+          option.className = "search-item";
+          option.setAttribute("role", "option");
+          option.innerHTML = "<strong>" + item.name + "</strong><span>" + item.address + "</span>";
+          option.addEventListener("click", function () {
+            state.complex = item;
+            searchInput.value = item.name;
+            searchList.classList.remove("open");
+            searchInput.setAttribute("aria-expanded", "false");
+            updateBrief();
+            showToast("단지와 기본 도면을 불러왔습니다.");
+          });
+          searchList.appendChild(option);
+        });
+      }
+      searchList.classList.add("open");
+      searchInput.setAttribute("aria-expanded", "true");
+    }
+
+    searchInput.addEventListener("focus", function () { renderComplexList(searchInput.value); });
+    searchInput.addEventListener("input", function () { renderComplexList(searchInput.value); });
+    document.addEventListener("click", function (event) {
+      if (!event.target.closest(".search-field")) {
+        searchList.classList.remove("open");
+        searchInput.setAttribute("aria-expanded", "false");
+      }
+    });
+
+    function deriveLegacyScope() {
+      if (state.workType === "whole") return "whole";
+      const publicItems = ["거실", "주방", "현관", "발코니", "바닥", "벽·도배", "조명", "수납"];
+      const hasPublic = state.selectedRooms.some(function (item) { return publicItems.includes(item); });
+      const hasBath = state.selectedRooms.includes("욕실");
+      const hasRoom = state.selectedRooms.includes("안방") || state.selectedRooms.includes("작은방");
+      if (hasBath && !hasPublic && !hasRoom) return "bathroom1";
+      if (hasRoom && !hasPublic && !hasBath) return "room";
+      return "living";
+    }
+
+    function syncIntakeUI() {
+      document.querySelectorAll(".work-type").forEach(function (button) {
+        button.classList.toggle("active", button.dataset.workType === state.workType);
+      });
+      document.getElementById("partial-room-block").hidden = state.workType !== "partial";
+      document.querySelectorAll('input[name="partial-room"]').forEach(function (input) {
+        input.checked = state.selectedRooms.includes(input.value);
+      });
+      document.querySelectorAll(".scope-option").forEach(function (button) {
+        button.classList.toggle("active", button.dataset.scope === state.scope);
+      });
+      document.querySelectorAll(".quick-budget").forEach(function (button) {
+        button.classList.toggle("active", Number(button.dataset.amount) === state.budgetAmount);
+      });
+    }
+
+    function setBudgetAmount(rawAmount, keepFocus) {
+      let amount = Number(String(rawAmount).replace(/[^0-9]/g, ""));
+      if (!Number.isFinite(amount)) amount = 3000000;
+      amount = Math.min(500000000, Math.max(3000000, amount));
+      state.budgetAmount = amount;
+      state.budget = getBudgetTier(amount);
+      const input = document.getElementById("budget-input");
+      input.value = amount.toLocaleString("ko-KR");
+      syncIntakeUI();
+      syncScopeUI();
+      updateBrief();
+      if (keepFocus) input.focus();
+    }
+
+    document.querySelectorAll(".work-type").forEach(function (button) {
+      button.addEventListener("click", function () {
+        state.workType = button.dataset.workType;
+        if (state.workType === "whole") {
+          state.scope = "whole";
+          state.selectedRooms = [];
+        } else {
+          state.scope = deriveLegacyScope();
+        }
+        state.budget = getBudgetTier(state.budgetAmount);
+        syncIntakeUI();
+        syncScopeUI();
+        updateBrief();
+      });
+    });
+
+    document.querySelectorAll('input[name="partial-room"]').forEach(function (input) {
+      input.addEventListener("change", function () {
+        state.selectedRooms = Array.from(document.querySelectorAll('input[name="partial-room"]:checked')).map(function (item) { return item.value; });
+        state.scope = deriveLegacyScope();
+        state.budget = getBudgetTier(state.budgetAmount);
+        syncIntakeUI();
+        syncScopeUI();
+        updateBrief();
+      });
+    });
+
+    function syncCheckboxState(name, key) {
+      state[key] = Array.from(document.querySelectorAll('input[name="' + name + '"]:checked')).map(function (item) { return item.value; });
+      updateBrief();
+    }
+
+    document.querySelectorAll('input[name="need"]').forEach(function (input) {
+      input.addEventListener("change", function () { syncCheckboxState("need", "needs"); });
+    });
+    document.querySelectorAll('input[name="must"]').forEach(function (input) {
+      input.addEventListener("change", function () { syncCheckboxState("must", "mustItems"); });
+    });
+    document.querySelectorAll('input[name="nice"]').forEach(function (input) {
+      input.addEventListener("change", function () { syncCheckboxState("nice", "niceItems"); });
+    });
+    document.querySelectorAll('input[name="keep"]').forEach(function (input) {
+      input.addEventListener("change", function () {
+        const group = Array.from(document.querySelectorAll('input[name="keep"]'));
+        if (input.value === "없음" && input.checked) group.forEach(function (item) { if (item !== input) item.checked = false; });
+        if (input.value !== "없음" && input.checked) group.forEach(function (item) { if (item.value === "없음") item.checked = false; });
+        syncCheckboxState("keep", "keepItems");
+      });
+    });
+    document.querySelectorAll('input[name="site"]').forEach(function (input) {
+      input.addEventListener("change", function () { syncCheckboxState("site", "siteFlags"); });
+    });
+
+    document.querySelectorAll(".budget-priority").forEach(function (button) {
+      button.addEventListener("click", function () {
+        document.querySelectorAll(".budget-priority").forEach(function (item) { item.classList.remove("active"); });
+        button.classList.add("active");
+        state.priority = button.dataset.priority;
+        updateBrief();
+      });
+    });
+
+    document.querySelectorAll(".quick-budget").forEach(function (button) {
+      button.addEventListener("click", function () {
+        if (button.dataset.amount === "custom") {
+          document.getElementById("budget-input").focus();
+          document.getElementById("budget-input").select();
+          return;
+        }
+        setBudgetAmount(button.dataset.amount);
+      });
+    });
+
+    document.getElementById("budget-input").addEventListener("input", function (event) {
+      const amount = Number(event.target.value.replace(/[^0-9]/g, ""));
+      if (amount >= 3000000 && amount <= 500000000) {
+        state.budgetAmount = amount;
+        state.budget = getBudgetTier(amount);
+        syncIntakeUI();
+        syncScopeUI();
+        updateBrief();
+      }
+    });
+    document.getElementById("budget-input").addEventListener("blur", function (event) { setBudgetAmount(event.target.value); });
+
+    document.querySelectorAll(".method-tab").forEach(function (button) {
+      button.addEventListener("click", function () {
+        state.tasteMethod = button.dataset.tasteMethod;
+        document.querySelectorAll(".method-tab").forEach(function (item) {
+          const active = item === button;
+          item.classList.toggle("active", active);
+          item.setAttribute("aria-selected", active ? "true" : "false");
+        });
+        document.getElementById("taste-gallery").hidden = state.tasteMethod !== "gallery";
+        document.getElementById("taste-upload").hidden = state.tasteMethod !== "upload";
+      });
+    });
+
+    document.querySelectorAll(".reference-card").forEach(function (button) {
+      button.addEventListener("click", function () {
+        button.classList.toggle("active");
+        state.tasteRefs = Array.from(document.querySelectorAll(".reference-card.active")).map(function (item) { return item.dataset.ref; });
+      });
+    });
+    document.querySelectorAll(".taste-reason").forEach(function (button) {
+      button.addEventListener("click", function () {
+        button.classList.toggle("active");
+        state.tasteReasons = Array.from(document.querySelectorAll(".taste-reason.active")).map(function (item) { return item.dataset.reason; });
+      });
+    });
+
+    function handleTasteFiles(fileList) {
+      const files = Array.from(fileList).filter(function (file) { return file.type.startsWith("image/"); }).slice(0, 10);
+      if (!files.length) return;
+      state.uploadedFiles = files;
+      const preview = document.getElementById("upload-preview");
+      preview.innerHTML = "";
+      files.forEach(function (file) {
+        const image = document.createElement("img");
+        image.src = URL.createObjectURL(file);
+        image.alt = "업로드한 취향 참고 이미지 " + (preview.children.length + 1);
+        preview.appendChild(image);
+      });
+      showToast(files.length + "장의 사진을 브라우저 미리보기에 추가했습니다.");
+    }
+
+    document.getElementById("taste-files").addEventListener("change", function (event) { handleTasteFiles(event.target.files); });
+    const uploadDrop = document.getElementById("upload-drop");
+    ["dragenter", "dragover"].forEach(function (eventName) {
+      uploadDrop.addEventListener(eventName, function (event) { event.preventDefault(); uploadDrop.classList.add("dragover"); });
+    });
+    ["dragleave", "drop"].forEach(function (eventName) {
+      uploadDrop.addEventListener(eventName, function (event) { event.preventDefault(); uploadDrop.classList.remove("dragover"); });
+    });
+    uploadDrop.addEventListener("drop", function (event) { handleTasteFiles(event.dataTransfer.files); });
+
+    function applyTasteProfile(styleId) {
+      const profile = tasteProfiles[styleId];
+      document.getElementById("profile-mood").textContent = profile.mood;
+      document.getElementById("profile-color").textContent = profile.color;
+      document.getElementById("profile-floor").textContent = profile.floor;
+      document.getElementById("profile-wall").textContent = profile.wall;
+      document.getElementById("profile-kitchen").textContent = profile.kitchen;
+      document.getElementById("profile-light").textContent = profile.light;
+      document.getElementById("edit-mood").value = profile.mood;
+      document.getElementById("edit-color").value = profile.color;
+    }
+
+    document.getElementById("analyze-taste").addEventListener("click", function () {
+      let selectedStyle = state.style;
+      if (state.tasteMethod === "upload") {
+        if (!state.uploadedFiles.length) { showToast("먼저 좋아하는 사진을 한 장 이상 올려주세요."); return; }
+        selectedStyle = "beige";
+      } else {
+        const selected = Array.from(document.querySelectorAll(".reference-card.active"));
+        if (!selected.length) { showToast("마음에 드는 공간을 한 장 이상 골라주세요."); return; }
+        const counts = selected.reduce(function (result, item) {
+          result[item.dataset.refStyle] = (result[item.dataset.refStyle] || 0) + 1;
+          return result;
+        }, {});
+        selectedStyle = Object.keys(counts).sort(function (a, b) { return counts[b] - counts[a]; })[0];
+      }
+      state.style = selectedStyle;
+      state.tasteConfirmed = false;
+      applyTasteProfile(selectedStyle);
+      document.getElementById("taste-profile").hidden = false;
+      updateBrief();
+      showToast("선택 패턴으로 취향 프로필 데모를 만들었습니다.");
+    });
+
+    document.getElementById("confirm-taste").addEventListener("click", function () {
+      state.tasteConfirmed = true;
+      showToast("취향 프로필을 브리프에 반영했습니다.");
+    });
+    document.getElementById("edit-taste").addEventListener("click", function () {
+      const edit = document.getElementById("profile-edit");
+      edit.hidden = !edit.hidden;
+      if (!edit.hidden) document.getElementById("edit-mood").focus();
+    });
+    document.getElementById("edit-mood").addEventListener("input", function (event) { document.getElementById("profile-mood").textContent = event.target.value || "직접 수정 중"; });
+    document.getElementById("edit-color").addEventListener("input", function (event) { document.getElementById("profile-color").textContent = event.target.value || "직접 수정 중"; });
+
+    document.querySelectorAll(".unit-option").forEach(function (button) {
+      button.addEventListener("click", function () {
+        document.querySelectorAll(".unit-option").forEach(function (item) { item.classList.remove("active"); });
+        button.classList.add("active");
+        state.unit = button.dataset.unit;
+        updateBrief();
+        showToast(state.unit + " 도면으로 변경했어요.");
+      });
+    });
+
+    document.querySelectorAll(".scope-option").forEach(function (button) {
+      button.addEventListener("click", function () {
+        document.querySelectorAll(".scope-option").forEach(function (item) { item.classList.remove("active"); });
+        button.classList.add("active");
+        state.scope = button.dataset.scope;
+        state.workType = state.scope === "whole" ? "whole" : "partial";
+        const legacyRooms = {
+          whole: [],
+          living: ["거실", "주방"],
+          bathroom1: ["욕실"],
+          bathroom2: ["욕실"],
+          room: ["안방"]
+        };
+        state.selectedRooms = legacyRooms[state.scope].slice();
+        const scope = scopeData[state.scope];
+        state.budget = getBudgetTier(state.budgetAmount);
+        syncIntakeUI();
+        syncScopeUI();
+        updateBrief();
+        showToast(scope.name + " 기준의 시안과 예산 범위로 바꿨어요.");
+      });
+    });
+
+    document.querySelectorAll(".style-card").forEach(function (button) {
+      button.addEventListener("click", function () {
+        document.querySelectorAll(".style-card").forEach(function (item) { item.classList.remove("active"); });
+        button.classList.add("active");
+        state.style = button.dataset.style;
+        applyTasteProfile(state.style);
+        updateBrief();
+      });
+    });
+
+    document.querySelectorAll(".budget-option").forEach(function (button) {
+      button.addEventListener("click", function () {
+        const representative = state.workType === "whole"
+          ? { refresh: 30000000, standard: 50000000, premium: 100000000 }
+          : { refresh: 10000000, standard: 30000000, premium: 70000000 };
+        setBudgetAmount(representative[button.dataset.budget]);
+      });
+    });
+
+    function selectRoom(room) {
+      if (!roomData[room] || !getActivePreviewRooms().includes(room)) return;
+      state.room = room;
+      document.querySelectorAll("[data-room]").forEach(function (item) {
+        item.classList.toggle("active", item.dataset.room === room);
+      });
+      updateBrief();
+    }
+
+    document.querySelectorAll(".room-chip, .scene-thumb, .iso-hotspot").forEach(function (button) {
+      button.addEventListener("click", function () {
+        selectRoom(button.dataset.room);
+      });
+    });
+
+    document.querySelectorAll(".view-tab").forEach(function (button) {
+      button.addEventListener("click", function () {
+        const view = button.dataset.view;
+        document.querySelectorAll(".view-tab").forEach(function (item) {
+          item.classList.toggle("active", item === button);
+          item.setAttribute("aria-selected", item === button ? "true" : "false");
+        });
+        document.getElementById("floorplan").classList.toggle("hidden", view !== "plan");
+        document.getElementById("iso-view").classList.toggle("hidden", view !== "iso");
+      });
+    });
+
+    document.getElementById("render-button").addEventListener("click", function () {
+      const layer = document.getElementById("rendering-layer");
+      const button = document.getElementById("render-button");
+      layer.classList.add("show");
+      button.disabled = true;
+      button.textContent = "공간 연출을 준비하고 있어요";
+      window.setTimeout(function () {
+        layer.classList.remove("show");
+        button.disabled = false;
+        button.textContent = "이 조건으로 가상 리모델링 보기";
+        showToast("예산과 선택 범위를 반영한 프로토타입 시안을 적용했어요.");
+      }, 1350);
+    });
+
+    let vrViewer = null;
+
+    function restoreVrSelection() {
+      if (!window.localStorage) return;
+      try {
+        const saved = JSON.parse(window.localStorage.getItem("jiban-vr-prototype") || "null");
+        if (!saved) return;
+        if (saved.vrScene && vrPrototypeData.scenes[saved.vrScene]) state.vrScene = saved.vrScene;
+        if (saved.selectedMaterials) {
+          Object.keys(state.selectedMaterials).forEach(function (group) {
+            const value = saved.selectedMaterials[group];
+            if (value && vrPrototypeData.materials[group][value]) state.selectedMaterials[group] = value;
+          });
+        }
+      } catch (error) {
+        console.warn("VR Prototype 저장값을 불러오지 못했습니다.", error);
+      }
+    }
+
+    function persistVrSelection() {
+      const payload = getVrPayload();
+      window.jibanVrQuotePayload = payload;
+      if (window.localStorage) {
+        try { window.localStorage.setItem("jiban-vr-prototype", JSON.stringify(payload)); }
+        catch (error) { console.warn("VR Prototype 선택값을 저장하지 못했습니다.", error); }
+      }
+      return payload;
+    }
+
+    function syncVrPanel(shouldPersist) {
+      const payload = getVrPayload();
+      document.getElementById("vr-style-value").textContent = payload.selectedStyle;
+      document.getElementById("vr-rooms-value").textContent = payload.selectedRooms.join(" / ");
+      document.getElementById("vr-base-budget").textContent = formatWon(payload.estimatedBudget.base);
+      document.getElementById("vr-estimate-value").textContent = formatWon(payload.estimatedBudget.lower) + "~" + formatWon(payload.estimatedBudget.upper);
+      document.getElementById("vr-adjustment-value").textContent = "입력 예산 + 샘플 옵션 변동 " + formatWon(payload.estimatedBudget.sampleAdjustment) + " 기준, ±5% 범위로 표시합니다.";
+      document.querySelectorAll(".vr-material-option").forEach(function (button) {
+        button.classList.toggle("active", state.selectedMaterials[button.dataset.vrMaterial] === button.dataset.value);
+      });
+      document.querySelectorAll(".vr-room-button").forEach(function (button) {
+        button.classList.toggle("active", button.dataset.vrScene === state.vrScene);
+      });
+      const scene = vrPrototypeData.scenes[state.vrScene];
+      document.getElementById("vr-viewer-title").textContent = scene.label + " · 샘플 360 시각화";
+      document.getElementById("vr-scene-status").textContent = "Prototype 장면 · 실제 평면 미연결";
+      updateBrief();
+      if (shouldPersist) persistVrSelection();
+    }
+
+    function createVrScenes() {
+      const scenes = {};
+      Object.keys(vrPrototypeData.scenes).forEach(function (sceneId) {
+        const scene = vrPrototypeData.scenes[sceneId];
+        scenes[sceneId] = {
+          type: "cubemap",
+          cubeMap: scene.cubeMap,
+          title: scene.label + " · 샘플 예시 시각화",
+          author: "집안 VR Prototype",
+          yaw: 0,
+          pitch: -2,
+          hfov: 100,
+          hotSpots: scene.links.map(function (link) {
+            return { pitch: link.pitch, yaw: link.yaw, type: "scene", text: link.label, sceneId: link.target };
+          })
+        };
+      });
+      return scenes;
+    }
+
+    function ensureVrViewer() {
+      if (vrViewer) {
+        vrViewer.resize();
+        if (vrViewer.getScene() !== state.vrScene) vrViewer.loadScene(state.vrScene);
+        return;
+      }
+      if (!window.pannellum) {
+        document.getElementById("vr-panorama").innerHTML = '<div style="display:grid;place-items:center;height:100%;padding:24px;color:#6f5144;background:#fff6e9;text-align:center;">VR 뷰어 라이브러리를 불러오지 못했습니다.<br>vendor/pannellum 파일을 확인해주세요.</div>';
+        return;
+      }
+      vrViewer = window.pannellum.viewer("vr-panorama", {
+        default: {
+          firstScene: state.vrScene,
+          autoLoad: true,
+          sceneFadeDuration: 450,
+          showControls: true,
+          showFullscreenCtrl: true,
+          keyboardZoom: true,
+          mouseZoom: true,
+          draggable: true
+        },
+        scenes: createVrScenes()
+      });
+      vrViewer.on("scenechange", function (sceneId) {
+        state.vrScene = sceneId;
+        syncVrPanel(true);
+      });
+      vrViewer.on("error", function () {
+        document.getElementById("vr-scene-status").textContent = "샘플 이미지 로드 확인 필요";
+      });
+    }
+
+    function openVrDemo() {
+      const section = document.getElementById("vr-demo");
+      section.hidden = false;
+      document.body.classList.add("vr-active");
+      syncVrPanel(false);
+      window.setTimeout(function () {
+        ensureVrViewer();
+        if (section.scrollIntoView) section.scrollIntoView({ block: "start" });
+      }, 0);
+    }
+
+    function closeVrDemo() {
+      const section = document.getElementById("vr-demo");
+      section.hidden = true;
+      document.body.classList.remove("vr-active");
+      const result = document.getElementById("outcome-step");
+      if (result.scrollIntoView) result.scrollIntoView({ block: "start" });
+    }
+
+    document.querySelectorAll(".vr-room-button").forEach(function (button) {
+      button.addEventListener("click", function () {
+        const sceneId = button.dataset.vrScene;
+        if (!vrPrototypeData.scenes[sceneId]) return;
+        state.vrScene = sceneId;
+        if (vrViewer) vrViewer.loadScene(sceneId);
+        syncVrPanel(true);
+      });
+    });
+
+    document.querySelectorAll(".vr-material-option").forEach(function (button) {
+      button.addEventListener("click", function () {
+        state.selectedMaterials[button.dataset.vrMaterial] = button.dataset.value;
+        syncVrPanel(true);
+        showToast("샘플 자재 선택과 Prototype 예상범위를 갱신했습니다.");
+      });
+    });
+
+    document.getElementById("vr-entry-button").addEventListener("click", function () {
+      if (window.location && window.location.hash !== "#vr-demo") window.location.hash = "vr-demo";
+      else openVrDemo();
+    });
+    document.getElementById("vr-back-button").addEventListener("click", function () {
+      if (window.location && window.location.hash === "#vr-demo" && window.history) window.history.back();
+      else closeVrDemo();
+    });
+    document.getElementById("vr-quote-button").addEventListener("click", function () {
+      persistVrSelection();
+      closeVrDemo();
+      if (window.history && window.history.replaceState) window.history.replaceState(null, "", "#outcome-step");
+      openPassport();
+      showToast("VR 선택 조건을 공사 브리프에 연결했습니다.");
+    });
+
+    if (window.addEventListener) {
+      window.addEventListener("hashchange", function () {
+        if (window.location.hash === "#vr-demo") openVrDemo();
+        else if (!document.getElementById("vr-demo").hidden) closeVrDemo();
+      });
+    }
+
+    function openPassport() {
+      document.getElementById("passport-modal").classList.add("open");
+      document.body.style.overflow = "hidden";
+    }
+    function closePassport() {
+      document.getElementById("passport-modal").classList.remove("open");
+      document.body.style.overflow = "";
+    }
+    document.getElementById("passport-button").addEventListener("click", openPassport);
+    document.querySelectorAll(".passport-link").forEach(function (button) { button.addEventListener("click", openPassport); });
+    document.getElementById("match-button").addEventListener("click", function () {
+      openPassport();
+      showToast("브리프와 현장 검토 후, 최대 3개 시공사 견적 비교 단계로 이어집니다.");
+    });
+    document.getElementById("modal-match-cta").addEventListener("click", function () {
+      showToast("현재는 시공사 연결 예정 단계입니다. 실제 서비스에서 동일조건 견적 비교로 이어집니다.");
+    });
+    document.querySelectorAll("[data-close-modal]").forEach(function (button) { button.addEventListener("click", closePassport); });
+    document.getElementById("passport-modal").addEventListener("click", function (event) {
+      if (event.target === event.currentTarget) closePassport();
+    });
+    document.addEventListener("keydown", function (event) {
+      if (event.key === "Escape") closePassport();
+    });
+
+    restoreVrSelection();
+    syncIntakeUI();
+    applyTasteProfile(state.style);
+    syncScopeUI();
+    updateBrief();
+    if (window.location && window.location.hash === "#vr-demo") openVrDemo();
+  </script>
+</body>
+</html>
